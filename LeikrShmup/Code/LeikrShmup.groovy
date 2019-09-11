@@ -31,13 +31,11 @@ class LeikrShmup extends leikr.Engine {
         	p.speedX = 3
         	offX -= 1	
         }
-        if(key("Up") && offY < 0) {
+        if(key("Up")) {
         	p.speedY = -3
-        	offY += 3	
         }
-        if(key("Down") && offY >= -130) {
+        if(key("Down")) {
         	p.speedY = 3
-        	offY -= 3
         }
         p.update(delta)
         
@@ -59,9 +57,9 @@ class LeikrShmup extends leikr.Engine {
     }
     
     void render(){	
-    	image("exterior-parallaxBG1", offX-256, offY)
-    	image("exterior-parallaxBG1", offX,offY)
-    	image("exterior-parallaxBG1", offX+256, offY)
+    	image("exterior-parallaxBG1", offX-256, -35)
+    	image("exterior-parallaxBG1", offX, -35)
+    	image("exterior-parallaxBG1", offX+256, -35)
     	
     
 		p.draw(screen)
