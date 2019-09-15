@@ -1,5 +1,5 @@
 class Player{
-	float x = 110, y = 20, vx = 0, vy = 0, gv = 2, coin = 0
+	def x = 110, y = 20, vx = 0, vy = 0, gv = 2, coin = 0, spid = 0, t = 0, i = 0
 	
 	def idleAnimation, walkingAnimation, runningAnimation, jumpingAnimation
 	
@@ -9,16 +9,16 @@ class Player{
 	//true = left, false = right
 	boolean facing = true, ground = false, jumping = false
 	
-	def frameSpeedTen = [0.1f,0.1f,0.1f,0.1f,0.1f,0.1f,0.1f,0.1f,0.1f,0.1f]
-	def frameSpeedEight = [0.1f,0.1f,0.1f,0.1f,0.1f,0.1f,0.1f,0.1f]
+	BigDecimal[] frameSpeedTen = [0.1f,0.1f,0.1f,0.1f,0.1f,0.1f,0.1f,0.1f,0.1f,0.1f]
+	BigDecimal[] frameSpeedEight = [0.1f,0.1f,0.1f,0.1f,0.1f,0.1f,0.1f,0.1f]
 	
 	def jumpTime = 12
 	
 	def Player(screen){
-		idleAnimation = screen.makeAnimSprite(0..9 as int[], frameSpeedTen as float[], 2, true)
-		walkingAnimation = screen.makeAnimSprite(10..19 as int[], frameSpeedTen  as float[], 2, true)
-		runningAnimation = screen.makeAnimSprite(20..27 as int[], frameSpeedEight as float[], 2, true)
-		jumpingAnimation = screen.makeAnimSprite(30..37 as int[], frameSpeedEight as float[], 2, true)
+		idleAnimation = [0,1,2,3,4,5,6,7,8,9]
+		walkingAnimation = [10, 11, 12,13, 14, 15,16,17,18,19]
+		runningAnimation = [20, 21, 22, 23, 24, 25, 26, 27]
+		jumpingAnimation = [30, 31, 32, 33, 34, 35, 36, 37]
 	}
 	
 	def setState(newState){
@@ -40,10 +40,41 @@ class Player{
 	}
 	
 	def update(delta){
-		idleAnimation.update(delta)
-		walkingAnimation.update(delta)
-		runningAnimation.update(delta)
-		jumpingAnimation.update(delta)
+		t++
+		switch(state){
+			case 0:
+				if(t >= 7) {
+					t=0
+					i++
+				}
+				if(i>=10)i=0
+				spid = idleAnimation[i]				
+				break;
+			case 1:
+				if(t >= 7) {
+					t=0
+					i++
+				}
+				if(i>=10)i=0
+				spid = walkingAnimation[i]
+				break;
+			case 2:
+				if(t >= 7) {
+					t=0
+					i++
+				}
+				if(i>=8)i=0
+				spid = runningAnimation[i]
+				break;
+			case 3:
+				if(t >= 7) {
+					t=0
+					i++
+				}
+				if(i>=8)i=0
+				spid = jumpingAnimation[i]
+				break;
+		}
 		
 		//Movement
 		if(jumping && jumpTime > 0){
@@ -75,19 +106,6 @@ class Player{
 	}	
 
 	def draw(screen){
-		switch(state){
-			case 0:
-				screen.spriteAnim(idleAnimation, x, y, facing, false)	
-				break
-			case 1:
-				screen.spriteAnim(walkingAnimation, x, y, facing, false)
-				break
-			case 2:
-				screen.spriteAnim(runningAnimation, x, y, facing, false)
-				break
-			case 3:
-				screen.spriteAnim(jumpingAnimation, x, y, facing, false)
-				break
-		}
+		screen.sprite(spid, x, y, facing, false, 2)
 	}
 }

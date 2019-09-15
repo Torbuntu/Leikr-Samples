@@ -11,7 +11,7 @@ class DogCat extends leikr.Engine {
     // Engine methods
     void create(){
         loadMap("map")
-        music("Map", true)
+        playMusic("Map", true)
         p  = new Player(screen)
     }  
     
@@ -61,7 +61,7 @@ class DogCat extends leikr.Engine {
             }
         }
         if((key("Up") || key("Z") || key("Space")) && p.vy == 0 && !p.jumping){
-            sfx("jump")
+            playSound("jump")
             p.setState(3)//3 jumping
             p.vy = -0.5f
             p.jumping = true
@@ -82,7 +82,6 @@ class DogCat extends leikr.Engine {
         coin(p.x+12, p.y+15)
         coin(p.x+20, p.y+15)
         p.update(delta)
-			println mapX	
     }
     
     void render(){	
@@ -92,33 +91,33 @@ class DogCat extends leikr.Engine {
     	}
     	bgColor(10)
     	
-        map(mapX, mapY) 
+        drawMap(mapX, mapY) 
 		
         p.draw(screen)
-        text("Coins: " + p.coin, 0,8,1)
+        drawString("Coins: " + p.coin, 0,8,1)
     }	
     //End engine methods
     
     //Start Helper methods 
     def solid(x,y){
-        float mx = (x - mapX) /32 
-        float my = (y - mapY) /32
-        int id = mapGet(floor(mx),floor(my))       
+        def mx = (x - mapX) /32 
+        def my = (y - mapY) /32
+        int id = getMapTileId(floor(mx),floor(my))       
         return	( id > 81 && id <= 97)
     }	
     
     def shroom(x,y){
-    	float mx = (x-mapX)/32
-    	float my = (y-mapY)/32
-    	int id = mapGet(floor(mx), floor(my))
+    	def mx = (x-mapX)/32
+    	def my = (y-mapY)/32
+    	int id = getMapTileId(floor(mx), floor(my))
     	return  id == 30
     }
     def coin(x,y){
-    	float mx = (x-mapX)/32
-    	float my = (y-mapY)/32
-    	int id = mapGet(floor(mx), floor(my))
+    	def mx = (x-mapX)/32
+    	def my = (y-mapY)/32
+    	int id = getMapTileId(floor(mx), floor(my))
     	if(id == 43) {
-            mapSet(floor(mx), floor(my), -1)
+            setMapTile(floor(mx), floor(my), -1)
             p.coin++
     	}
     }
