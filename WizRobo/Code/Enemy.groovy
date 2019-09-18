@@ -1,29 +1,27 @@
-import groovy.transform.CompileStatic
-@CompileStatic
 class Enemy{
-	float x = 72 
-	float y = 72 
-	float width =8 
-	float height =8 
-	boolean f =false 
-	int spid = 10 
-	boolean alive = true 
-	boolean remove = false 
-	int animTime = 0 
-	int[] walkAnim = [10, 11, 12, 13] 
-	int waIndex = 0 
-	Map keyA = [x: 1, y: 1] 
-	Map keyB = [x: 1, y: 1]
-	float vs
-	int l
-	int r
-	int health
+	def x = 72 
+	def y = 72 
+	def width =8 
+	def height =8 
+	def f =false 
+	def spid = 10 
+	def alive = true 
+	def remove = false 
+	def animTime = 0 
+	def walkAnim = [10, 11, 12, 13] 
+	def waIndex = 0 
+	def keyA = [x: 1, y: 1] 
+	def keyB = [x: 1, y: 1]
+	def vs
+	def l
+	def r
+	def health
 	
 	def Enemy(){
 	
 	}
 	
-	def Enemy(float x, float y, float vs, int l, int r, Map keyA, Map keyB){
+	def Enemy(def x, def y, def vs, def l, def r, def keyA, def keyB){
 		this.x = x
 		this.y = y
 		this.vs = vs
@@ -43,8 +41,8 @@ class Enemy{
 		waIndex = 0
 	}
 	
-	Enemy(float x, float y, float vs, int l, int r, float width, float height, boolean f,
-	int spid, boolean alive, boolean remove, int animTime, int[] walkAnim, int waIndex, Map keyA, Map keyB){
+	Enemy(def x, def y, def vs, def l, def r, def width, def height, def f,
+	def spid, def alive, def remove, def animTime, def walkAnim, def waIndex, def keyA, def keyB){
 		this.x = x
 		this.y = y
 		this.vs = vs
@@ -63,8 +61,8 @@ class Enemy{
 		this.keyB = keyB
 	}
 	
-	Enemy(float x, float y, float vs, int l, int r, float width, float height, boolean f,
-	int spid, boolean alive, boolean remove, int animTime, int[] walkAnim, int waIndex, Map keyA, Map keyB, int health){
+	Enemy(def x, def y, def vs, def l, def r, def width, def height, def f,
+	def spid, def alive, def remove, def animTime, def walkAnim, def waIndex, def keyA, def keyB, def health){
 		this.x = x
 		this.y = y
 		this.vs = vs

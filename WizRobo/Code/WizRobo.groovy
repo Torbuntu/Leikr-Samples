@@ -1,8 +1,6 @@
 import Enemy
 import Wizard
 import Bolt
-import groovy.transform.CompileStatic
-@CompileStatic
 class WizRobo extends leikr.Engine {
 	
     boolean DEBUG = false;
@@ -28,7 +26,7 @@ class WizRobo extends leikr.Engine {
 	    
     int time = 0
 		    
-    boolean solid(float x, float y){
+    boolean solid(x, y){
         int cellid = getTile(x,y)
         if(	cellid > 60 && cellid < 170){
             return true
@@ -36,10 +34,10 @@ class WizRobo extends leikr.Engine {
         return false
     }	  
 	
-    int getTile(float x, float y){
-        int mx = ((x)/8 ) as int
-        int my = ((y)/8 ) as int
-        return mapGet(mx,my)
+    int getTile(x, y){
+        def mx = ((x)/8 )
+        def my = ((y)/8 )
+        return getMapTileId(mx,my)
     }
     
     void movep(){        
@@ -83,14 +81,14 @@ class WizRobo extends leikr.Engine {
     }  
         
     void checkScroll(){
-        int tile = getTile((wizard.x as int)+2, (wizard.y as int)+2)
+        int tile = getTile(wizard.x+2, wizard.y+2)
         if( tile == 29 || tile == 30 || tile == 31){
-            mapSet((int)((wizard.x+2)/8), (int)((wizard.y+4)/8), 0)
+            setMapTile(((wizard.x+2)/8), ((wizard.y+4)/8), 0)
             wizard.scrolls++
         }
         if(tile == 193 && wizard.health < 3){
             wizard.health++
-            mapRemove((int)((wizard.x+2)/8), (int)((wizard.y+4)/8))
+            removeMapTile(((wizard.x+2)/8), ((wizard.y+4)/8))
         }
     }   
     
@@ -181,7 +179,7 @@ class WizRobo extends leikr.Engine {
         wizard.y = 80
         
         enemies = [] // only needed when the game loops around during development.
-        enemies.add(new Enemy(40f, 72f, 0.6f, 40, 184, 32f, 32f, false, 60,  true, false, 0, [60,61,62,63] as int[],  0, [x: 27, y: 1] as Map, [x:28, y:1] as Map,  8))
+        enemies.add(new Enemy(40, 72, 0.6, 40, 184, 32, 32, false, 60,  true, false, 0, [60,61,62,63],  0, [x: 27, y: 1], [x:28, y:1],  8))
 
     	loadMap("lvl5")
     }
@@ -193,8 +191,8 @@ class WizRobo extends leikr.Engine {
         
         enemies = []
         enemies.addAll([
-			new Enemy(190f, 120f, 0.2f, 8, 200, 32f, 32f, false, 60, true, false, 0, [60,61,62,63] as int[], 0, [x: 28, y: 3] as Map, [x:28, y:2] as Map, 8),      	
-			new Enemy(30f, 120f, 0.6f, 8, 200, 32f, 32f, false, 60, true, false, 0, [60,61,62,63] as int[], 0, [x: 28, y: 3] as Map, [x:28, y:2] as Map,  8)
+			new Enemy(190f, 120f, 0.2f, 8, 200, 32f, 32f, false, 60, true, false, 0, [60,61,62,63], 0, [x: 28, y: 3] as Map, [x:28, y:2] as Map, 8),      	
+			new Enemy(30f, 120f, 0.6f, 8, 200, 32f, 32f, false, 60, true, false, 0, [60,61,62,63], 0, [x: 28, y: 3] as Map, [x:28, y:2] as Map,  8)
         ]) 
     	loadMap("lvlFinal")
     }
@@ -207,14 +205,14 @@ class WizRobo extends leikr.Engine {
             bolt.charge = 0
             if(!enemy.alive){
                 enemy.remove = true
-                mapRemove((enemy.x as int)/8 as int,(enemy.y as int )/8 as int)
+                removeMapTile((enemy.x)/8,(enemy.y )/8)
             }else{
                 enemy.alive = false
                 enemy.x = ceil(enemy.x)
                 enemy.x = enemy.x - enemy.x%8
-                mapRemove(enemy.keyA.x as int, enemy.keyA.y as int)
-                mapRemove(enemy.keyB.x as int, enemy.keyB.y as int)
-                mapSet((int)(enemy.x/8), (int)(enemy.y/8), 88)
+                removeMapTile(enemy.keyA.x, enemy.keyA.y)
+                removeMapTile(enemy.keyB.x, enemy.keyB.y)
+                setMapTile((enemy.x/8), (enemy.y/8), 88)
             }                       
     	}
     }    
@@ -224,9 +222,9 @@ class WizRobo extends leikr.Engine {
             if(it.remove){
             	int num = randInt(2)            	
                 if(num==1){
-                    int x = it.x/8 as int
-                    int y = it.y/8 as int
-                    mapSet(x, y, 193)
+                    int x = it.x/8
+                    int y = it.y/8
+                    setMapTile(x, y, 193)
                 }
             }
         }
@@ -311,22 +309,22 @@ class WizRobo extends leikr.Engine {
                     it.alive = false
                     it.remove = true
                     
-                    mapSet((int)((it.x+16)/8), (int)((it.y+16)/8), 29)//Drop scroll for the victor
+                    setMapTile(((it.x+16)/8), ((it.y+16)/8), 29)//Drop scroll for the victor
                     
-                    mapSet(it.keyA.x as int, (it.keyA.y as int), 33)
-                    mapSet(it.keyB.x as int, (it.keyB.y as int), 33)
+                    setMapTile(it.keyA.x, it.keyA.y, 33)
+                    setMapTile(it.keyB.x, it.keyB.y, 33)
                     
-                    mapSet(it.keyA.x as int, (it.keyA.y as int)+5, 33)
-                    mapSet(it.keyB.x as int, (it.keyB.y as int)+5, 33)
+                    setMapTile(it.keyA.x, it.keyA.y+5, 33)
+                    setMapTile(it.keyB.x, it.keyB.y+5, 33)
                     
-                    mapSet(it.keyA.x as int, (it.keyA.y as int)+6, 33)
-                    mapSet(it.keyB.x as int, (it.keyB.y as int)+6, 33)
+                    setMapTile(it.keyA.x, it.keyA.y+6, 33)
+                    setMapTile(it.keyB.x, it.keyB.y+6, 33)
                     
-                    mapSet(it.keyA.x as int, (it.keyA.y as int)+7, 33)
-                    mapSet(it.keyB.x as int, (it.keyB.y as int)+7, 33)
+                    setMapTile(it.keyA.x, it.keyA.y+7, 33)
+                    setMapTile(it.keyB.x, it.keyB.y+7, 33)
                     
-                    mapSet(it.keyA.x as int, (it.keyA.y as int)+8, 33)
-                    mapSet(it.keyB.x as int, (it.keyB.y as int)+8, 33)
+                    setMapTile(it.keyA.x, it.keyA.y+8, 33)
+                    setMapTile(it.keyB.x, it.keyB.y+8, 33)
                 }  
             }	
     	}
@@ -443,8 +441,8 @@ class WizRobo extends leikr.Engine {
             enemies[0].enemyAnimation()
             boltHitEnemy(enemies[0])
             if(!enemies[0].alive && !enemies[0].remove){
-                mapSet((int)(enemies[0].x/8), (int)(enemies[0].y/8), 88)
-                mapSet(enemies[0].keyA.x as int,enemies[0].keyA.y as int,33)
+                setMapTile((enemies[0].x/8), (enemies[0].y/8), 88)
+                setMapTile(enemies[0].keyA.x,enemies[0].keyA.y,33)
             }
             break;
         case 1:
@@ -505,10 +503,10 @@ class WizRobo extends leikr.Engine {
         sprite(healthSpids[1], 96, 0)
         sprite(healthSpids[2], 88, 0)
         
-        text("lvl:"+level, 112, 0, 1)
+        drawString("lvl:"+level, 112, 0, 1)
         
         sprite(29, 160, 0)
-        text(":"+wizard.scrolls, 168, 0, 1)
+        drawString(":"+wizard.scrolls, 168, 0, 1)
     }
 
     void renderlvl(){
@@ -521,15 +519,15 @@ class WizRobo extends leikr.Engine {
         for(Enemy it in enemies){
             if(it.alive){
                 sprite(it.spid, it.x, it.y, it.f, false, 2)
-                text("["+it.health+"]", it.x+8 as float, it.y-8 as float, 8)
+                drawString("["+it.health+"]", it.x+8, it.y-8, 8)
             }
         }  
     }	
     
     void renderGameOver(){
-    	text("Game Over!", 46, 32, 1)
-    	text("Thanks for playing this demo.", 8, 42, 1)
-    	text("Press Enter to play again.", 8, 54, 1)
+    	drawString("Game Over!", 46, 32, 1)
+    	drawString("Thanks for playing this demo.", 8, 42, 1)
+    	drawString("Press Enter to play again.", 8, 54, 1)
     }
 	
     void render(){
@@ -540,19 +538,19 @@ class WizRobo extends leikr.Engine {
         
 		
         if(title){
-            image("stonewall", 0,0)
-            map()
-            text("Escape the dungeon!", 46, 32, 1)
-            text("Move: arrows. Jump: Space. Charge: X. Shoot: Z. Start: Enter", 12, 110, 116, 1)
+            drawTexture("stonewall", 0,0)
+            drawMap()
+            drawString("Escape the dungeon!", 46, 32, 1)
+            drawString("Move: arrows. Jump: Space. Charge: X. Shoot: Z. Start: Enter", 12, 110, 116, 1)
             return
         }else{
-            image("stonewall", 0,8)
-            map()	
+            drawTexture("stonewall", 0,8)
+            drawMap()	
         }
 		
         renderGui()
         if(wizard.charged){
-            sprite(9, wizard.x, wizard.y - 8 as float, wizard.cf, false)
+            sprite(9, wizard.x, wizard.y - 8, wizard.cf, false)
         }
         sprite(wizard.spid, wizard.x, wizard.y, wizard.f, false)
 

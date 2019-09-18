@@ -57,9 +57,9 @@ class LeikrShmup extends leikr.Engine {
     }
     
     void render(){	
-    	image("exterior-parallaxBG1", offX-256, -35)
-    	image("exterior-parallaxBG1", offX, -35)
-    	image("exterior-parallaxBG1", offX+256, -35)
+    	drawTexture("exterior-parallaxBG1", offX-256, -35)
+    	drawTexture("exterior-parallaxBG1", offX, -35)
+    	drawTexture("exterior-parallaxBG1", offX+256, -35)
     	
     
 		p.draw(screen)
