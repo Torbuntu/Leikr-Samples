@@ -118,7 +118,7 @@ class FoodChain extends leikr.Engine {
 //        case 2:
 //            if(buttonId == btnCode("SELECT")){
 //                state = 4
-//                sfx("shift")
+//                playSound("shift")
 //            }
 //            if(usingSwap){
 //                moveCursor()
@@ -135,13 +135,13 @@ class FoodChain extends leikr.Engine {
 //        case 3:
 //            if(buttonId == btnCode("SELECT") ){
 //                init()
-//                sfx("shift")
+//                playSound("shift")
 //            }
 //            break;
 //        case 4:
 //            if(buttonId == btnCode("SELECT")){
 //                state = 2
-//                sfx("shift")
+//                playSound("shift")
 //            }
 //            break;
 //        default:
@@ -189,9 +189,9 @@ class FoodChain extends leikr.Engine {
     	dropSpeed++
         switch(state){
         case 0:
-            music("title", true)
+            playMusic("title", true)
             if(keyPress("Space") || bp("SELECT")) {
-                sfx("start")
+                playSound("start")
                 state++
                 col.times{i->
                     row.times{j->
@@ -206,18 +206,18 @@ class FoodChain extends leikr.Engine {
             if(blink > 20) blink = 0
             blink++
             if(keyPress("Space") || bp("SELECT") ){
-                sfx("start")
+                playSound("start")
                 stopAllMusic()
                 state++
             }
         		
             if(keyPress("Left") || bp("LEFT")){
-                sfx("shift")
+                playSound("shift")
                 page = false
             }
         		
             if(keyPress("Right") || bp("RIGHT") ){
-                sfx("shift")
+                playSound("shift")
                 page = true
             }
         		
@@ -298,7 +298,7 @@ class FoodChain extends leikr.Engine {
             //CHECL AVAILABLE MOVES
             if(!movesExist()){
                 if(lives > 0){
-                    sfx("noMove")
+                    playSound("noMove")
                     shake = 15
                     lives--
                     resetBoard()
@@ -326,7 +326,7 @@ class FoodChain extends leikr.Engine {
                 high_score = level
                 saveUtil.saveScore(high_score)
                 lives++
-                sfx("lifeUp")        			
+                playSound("lifeUp")        			
                 if(lives>9) lives = 10
             }
             if(megaScore == 0){
@@ -334,7 +334,7 @@ class FoodChain extends leikr.Engine {
                 if(starving == 0){
                     starving = 200
                     lives--
-                    sfx("noMove")
+                    playSound("noMove")
                     shake = 15
                 }
             }
@@ -355,7 +355,7 @@ class FoodChain extends leikr.Engine {
         case 3://Game over
             if(keyPress("Space") ){
                 init()
-                sfx("shift")
+                playSound("shift")
             }
             if(blink > 20) blink = 0
             blink++
@@ -363,7 +363,7 @@ class FoodChain extends leikr.Engine {
         case 4: //Acheivments
             if(keyPress("Space") ){
                 state = 2
-                sfx("shift")
+                playSound("shift")
             }
         		
             break;
@@ -375,14 +375,14 @@ class FoodChain extends leikr.Engine {
     void render(){	
         switch(state){
         case 0:
-            image("title",0,0)
+            drawTexture("title",0,0)
             if(blink > 10){
-                text("Press Space/Select", 58, 124, 120, 1, 16)
+                drawString("Press Space/Select", 58, 124, 120, 1, 16)
             }else{
-                text("Press Space/Select", 58, 124, 120, 1, 32)
+                drawString("Press Space/Select", 58, 124, 120, 1, 32)
             }
-            text("High Score: $high_score", 58, 108, 120, 1, 16)
-            text("High Score: $high_score", 59, 109, 120, 1, 32)
+            drawString("High Score: $high_score", 58, 108, 120, 1, 16)
+            drawString("High Score: $high_score", 59, 109, 120, 1, 32)
         		
     			
             break;
@@ -397,19 +397,19 @@ class FoodChain extends leikr.Engine {
             }else{
                 bgX = 0
             }
-            image("bg",bgX,bgY)
+            drawTexture("bg",bgX,bgY)
         		
             //Draws the items in the jar
             col.times{i->
                 row.times{j->
                     if(i ==cx && j==cy){
                         if(cf > 10){
-                            jar[i][j].draw(screen,(int)(96+ i*16),(int)(16+j*16), true)
+                            jar[i][j].draw(screen,(96+ i*16),(16+j*16), true)
                         }else{
-                            jar[i][j].draw(screen,(int)(96+ i*16),(int)(16+j*16), false)
+                            jar[i][j].draw(screen,(96+ i*16),(16+j*16), false)
                         }	    				
                     }else{    				
-                        jar[i][j].draw(screen,(int)(96+ i*16),(int)(16+j*16))
+                        jar[i][j].draw(screen,(96+ i*16),(16+j*16))
                     }
                 }
             }
@@ -419,19 +419,19 @@ class FoodChain extends leikr.Engine {
 	    		
             //Draw health
             lives.times{
-                sprite(80, 8, (int)(8*it+8) )
+                sprite(80, 8, (8*it+8) )
             }
 	    		
             //Draw container scores
             drawScores()
 	    		
             //Draw megaScore
-            drawColor(23)	    		
-            rect(96, 7, megaScore, 4, true)
+            setColor(23)	    		
+            fillRect(96, 7, megaScore, 4)
 	    		
             //draw available
-            if(available > 15) drawColor(6)
-            rect(232, 144, 2, -available*4, true)
+            if(available > 15) setColor(6)
+            fillRect(232, 144, 2, -available*4)
             if(available <= 4){
                 sprite(81, 229, 148)
             }
@@ -443,21 +443,21 @@ class FoodChain extends leikr.Engine {
             //Draw bombs and swaps
             bombs.times{
                 if(it > 4){
-                    sprite(82, 80, (int)(8*it-32))
+                    sprite(82, 80, (8*it-32))
                 }else{
-                    sprite(82, 70, (int)(8*it+8))
+                    sprite(82, 70, (8*it+8))
                 }
             }
             swaps.times{
                 if(it > 4){
-                    sprite(83, 80, (int)(8*it+31))
+                    sprite(83, 80, (8*it+31))
                 }else{
-                    sprite(83, 70, (int)(8*it+71))
+                    sprite(83, 70, (8*it+71))
                 }
             }
 	    		
             if(bombDur > 0){
-                sprite(2, (int)(96+bombX*16), (int)(16+bombY*16), 3)
+                sprite(2, (96+bombX*16), (16+bombY*16), 3)
             }
 	    		
             if(newAcheivmentIcon > 0){
@@ -468,32 +468,32 @@ class FoodChain extends leikr.Engine {
             }
 	    		
             //temp
-            text("Level: $level", 8, 150, 18)
+            drawString("Level: $level", 8, 150, 18)
 	    	        		
             break;
         case 3:// Gameover condition
             8.times{
                 sprite(it, 56+it*16, 64+goWave[it], 1)
             }
-            text("GAME OVER", 0, 32, 240, 1, 32)
-            drawColor(50)//black
+            drawString("GAME OVER", 0, 32, 240, 1, 32)
+            setColor(50)//black
         		
-            rect(56, 122, 124, 60, true)
+            fillRect(56, 122, 124, 60)
             if(blink > 10){        			
-                text("Press Space/Select", 58, 124, 120, 1, 16)
+                drawString("Press Space/Select", 58, 124, 120, 1, 16)
             }else{
-                text("Press Space/Select", 58, 124, 120, 1, 32)
+                drawString("Press Space/Select", 58, 124, 120, 1, 32)
             }
-            text("High Score: $high_score", 58, 108, 120, 1, 16)
-            text("High Score: $high_score", 59, 109, 120, 1, 32)
+            drawString("High Score: $high_score", 58, 108, 120, 1, 16)
+            drawString("High Score: $high_score", 59, 109, 120, 1, 32)
         		
             break;
         		
         case 4: //Acheivments
-            image("awards", 0,0)
-            text("Acheivments", 0, 16, 240, 1, 32)
+            drawTexture("awards", 0,0)
+            drawString("Acheivments", 0, 16, 240, 1, 32)
             drawAcheivments()
-            if(airEaten>0) text("Air eaten: $airEaten", 8, 130, 240, 0, 16)
+            if(airEaten>0) drawString("Air eaten: $airEaten", 8, 130, 240, 0, 16)
 				
 
             break;
@@ -540,14 +540,14 @@ class FoodChain extends leikr.Engine {
             bombs++
             if(bombs>10)bombs=10
             jar[x][y].type = 8
-            sfx("item")
+            playSound("item")
             return
         }
         if(tp == 11){
             swaps++
             if(swaps>10)swaps=10
             jar[x][y].type = 8
-            sfx("item")
+            playSound("item")
             return
         }
         //If no matches on any sides in middle.
@@ -555,13 +555,13 @@ class FoodChain extends leikr.Engine {
             && (x < col-1 && jar[x+1][y].type != tp || x == 7) 
             && (y > 0 && jar[x][y-1].type != tp || y == 0) 
             && (y < row-1 && jar[x][y+1].type != tp || y == 7) ) {
-            sfx("select")
+            playSound("select")
             return
         }
 
 	    
     	jar[x][y].type = 8
-    	sfx("eat")
+    	playSound("eat")
     	int score = matchesScoring(tp, x, y)
       	
     	foodTypeScoreCheck(tp, score)
@@ -738,7 +738,7 @@ class FoodChain extends leikr.Engine {
     	jar[x][y].type = temp
     	usingSwap = false
     	swaps--
-    	sfx("swap")
+    	playSound("swap")
     }
     //END SWAP POWER
     
@@ -753,7 +753,7 @@ class FoodChain extends leikr.Engine {
         //ENTER ACHEIVMENT PAGE
         if(keyPress("Space") ) {
             state = 4
-            sfx("shift")
+            playSound("shift")
         }  
 		
         if(usingSwap){
@@ -766,32 +766,32 @@ class FoodChain extends leikr.Engine {
 		
         //Check for Super usage input
         if(mSuper && (keyPress("X") || bp("X") )){
-            sfx("feast")
+            playSound("feast")
             mSuper = false
             megaScore += supers.useSuper(jar, 6, 7)
             meats = 0
         }
         if(vSuper && (keyPress("Y") || bp("Y"))){
-            sfx("feast")
+            playSound("feast")
             vSuper = false
             megaScore += supers.useSuper(jar, 2, 3)
             veggies = 0
         }
         if(fSuper && (keyPress("Z") || bp("X") )){
-            sfx("feast")
+            playSound("feast")
             fSuper = false
             megaScore += supers.useSuper(jar, 4, 5)
             fruits = 0
         }
         if(dSuper && (keyPress("B") || bp("B") )){
-            sfx("feast")
+            playSound("feast")
             dSuper = false
             megaScore += supers.useSuper(jar, 0, 1)
             drinks = 0
         }
         //Bombs or Swaps
         if( (keyPress("Q") || (bp("LEFT_BUMPER"))) && bombs > 0){
-            sfx("bomb")
+            playSound("bomb")
             bombs--
             explode(cx, cy)
         }
@@ -856,22 +856,22 @@ class FoodChain extends leikr.Engine {
     //Draw cursor
     def drawCursor(){
     	if(usingSwap){
-            drawColor(9)
-            rect((int)(96+cx*16), (int)(16+cy*16), 16, 16)
-            drawColor(20)
-            rect((int)(96+swapX*16), (int)(16+swapY*16), 16, 16)
+            setColor(9)
+            drawRect((96+cx*16), (16+cy*16), 16, 16)
+            setColor(20)
+            drawRect((96+swapX*16), (16+swapY*16), 16, 16)
             //Draw line between the swapping tiles
-            drawColor(22)
-            line((int)(96+swapX*16)+8, (int)(16+swapY*16)+8, (int)(96+cx*16)+8, (int)(16+cy*16)+8)
+            setColor(22)
+            drawLineSegment((96+swapX*16)+8, (16+swapY*16)+8, (96+cx*16)+8, (16+cy*16)+8)
             return
     	}
     	if(cf>10){
-            drawColor(21)
-            rect((int)(96+cx*16), (int)(16+cy*16), 16, 16)
+            setColor(21)
+            drawRect((96+cx*16), (16+cy*16), 16, 16)
             drawFeastAvailable(true)
         }else{
-            drawColor(24)
-            rect((int)(96+cx*16), (int)(16+cy*16), 16, 16)
+            setColor(24)
+            drawRect((96+cx*16), (16+cy*16), 16, 16)
             drawFeastAvailable(false)
         }
     }
@@ -900,37 +900,37 @@ class FoodChain extends leikr.Engine {
     
     //Draw the container scores:
     def drawScores(){
-        drawColor(23)
-        rect(24, 48, 16, -meats,   true)//meats
-        drawColor(20)
-        rect(48, 48, 16, -veggies, true)//veggies
-        drawColor(15)
-        rect(24, 112, 16, -fruits,  true)//fruits
-        drawColor(32)
-        rect(48, 112, 16, -drinks,  true)//drinks
+        setColor(23)
+        fillRect(24, 48, 16, -meats)//meats
+        setColor(20)
+        fillRect(48, 48, 16, -veggies)//veggies
+        setColor(15)
+        fillRect(24, 112, 16, -fruits)//fruits
+        setColor(32)
+        fillRect(48, 112, 16, -drinks)//drinks
     }
     
     def drawInstructions(page){
-    	drawColor(7)
-    	rect(0,0,240,160, true)//bg gray  
+    	setColor(7)
+    	fillRect(0,0,240,160)//bg gray  
     	if(page){
-            text("How to Play. Pg 2", 0, 0, 240, 1, 16)
+            drawString("How to Play. Pg 2", 0, 0, 240, 1, 16)
             sprite(34,0,0 )
     		
             sprite(10, 8, 16, 1)
-            text("Collect bombs to blast away 3x3 squares with chain reaction explosions! Use `Q` or Left Bumper.", 32, 16, 200, 32)
+            drawString("Collect bombs to blast away 3x3 squares with chain reaction explosions! Use `Q` or Left Bumper.", 32, 16, 200, 32)
     		
     		
             sprite(11, 8, 60, 1)
-            text("Collect swap tiles to be able to swap any two tiles on the board! Use `W` or Right Bumper.", 32, 60, 200, 32)
+            drawString("Collect swap tiles to be able to swap any two tiles on the board! Use `W` or Right Bumper.", 32, 60, 200, 32)
     		
-            text("Find the biggest combos to earn the most points to fill your hunger meter and progress to the next level.", 0, 100, 240, 32)
+            drawString("Find the biggest combos to earn the most points to fill your hunger meter and progress to the next level.", 0, 100, 240, 32)
     	}else{
-            image("instruct", 0,0)
+            drawTexture("instruct", 0,0)
 			
-            text("How to Play. Pg 1", 0, 0, 240, 1, 16)
+            drawString("How to Play. Pg 1", 0, 0, 240, 1, 16)
 			
-            text("Fill these to activate a Feast!\nEach container holds a food type: Drinks, Veggies, Fruits or Meats.", 38,18, 200, 32)
+            drawString("Fill these to activate a Feast!\nEach container holds a food type: Drinks, Veggies, Fruits or Meats.", 38,18, 200, 32)
 			
             //Draw types
             8.times{
@@ -944,73 +944,73 @@ class FoodChain extends leikr.Engine {
             2.times{
                 sprite(34+it, 14+(it*9), 88)
             }
-            text("Move the cursor with Arrow Keys/D-pad\n`A` to make selection.",38,80, 200, 32 )
+            drawString("Move the cursor with Arrow Keys/D-pad\n`A` to make selection.",38,80, 200, 32 )
 			
             //Hearts
             sprite(80, 8, 108)
-            text("Hearts are used up when you run out of moves. Each level earns an extra life!", 16, 108, 200, 32)
+            drawString("Hearts are used up when you run out of moves. Each level earns an extra life!", 16, 108, 200, 32)
             sprite(33, 232, 0)
     	}  
     	
         if(blink > 10){
-            text("Press Space/Select", 58, 142, 120, 1, 16)
+            drawString("Press Space/Select", 58, 142, 120, 1, 16)
 			
 			
         }else{
-            text("Press Space/Select", 58, 142, 120, 1, 32)
+            drawString("Press Space/Select", 58, 142, 120, 1, 32)
         }
     }
     
     def checkAcheivments(){
     	if(level >= 5 && !aFive) {
-            sfx("award")
+            playSound("award")
             aFive = true
             newAcheivmentIcon = achSpeed
     	}
     	if(level >= 10 && !aTen) {
-            sfx("award")
+            playSound("award")
             aTen = true
             newAcheivmentIcon = achSpeed
     	}
     	if(level >= 15 && !aFifteen){
-            sfx("award")
+            playSound("award")
             aFifteen = true
             newAcheivmentIcon = achSpeed
     	} 
     	if(level >= 20 && !aTwenty){
-            sfx("award")
+            playSound("award")
             aTwenty = true
             newAcheivmentIcon = achSpeed
     	} 
     	
     	if(bombs == 10 && !aBombBastic){
-            sfx("award")
+            playSound("award")
             aBombBastic = true
             newAcheivmentIcon = achSpeed
     	} 
     	if(swaps == 10 && !aYeOleSwitcheroo){
-            sfx("award")
+            playSound("award")
             aYeOleSwitcheroo = true
             newAcheivmentIcon = achSpeed
     	} 
     	
     	if(meats >= 40 && !aMeatPump) {
-            sfx("award")
+            playSound("award")
             aMeatPump = true
             newAcheivmentIcon = achSpeed
     	}
     	if(veggies >= 40 && !aGrassGreener) {
-            sfx("award")
+            playSound("award")
             aGrassGreener = true
             newAcheivmentIcon = achSpeed
     	}
     	if(fruits >= 40 && !aAllOrangeJuice) {
-            sfx("award")
+            playSound("award")
             aAllOrangeJuice = true
             newAcheivmentIcon = achSpeed
     	}
     	if(drinks >= 40 && !aDairyQueen) {
-            sfx("award")
+            playSound("award")
             newAcheivmentIcon = achSpeed
             aDairyQueen = true
     	}

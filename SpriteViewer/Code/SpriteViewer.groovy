@@ -208,45 +208,45 @@ class SpriteViewer extends leikr.Engine {
     	try{
 			sprite(idx,sx,sy,ss)
     	}catch(Exception ex){
-    		text("X", 156, 108, 23)
+    		drawString("X", 156, 108, 23)
     	}
     	//Text display
-    	text("ID: $idx", 16, 32, 32)
-    	text("Size: $ss", 16, 48, 32)
+    	drawString("ID: $idx", 16, 32, 32)
+    	drawString("Size: $ss", 16, 48, 32)
     	if(mode != 1){
-    		text("Sheet: $sheetName", 16, 64, 32)
+    		drawString("Sheet: $sheetName", 16, 64, 32)
     	}else if(mode == 1){
-    		text("Sheet: $sheetName", 16, 64, 30)
+    		drawString("Sheet: $sheetName", 16, 64, 30)
     	}
     	if(mode != 2){
-    		text("Start: $start", 16, 80, 32)
+    		drawString("Start: $start", 16, 80, 32)
     	}else if(mode == 2){
-    		text("Start: $start", 16, 80, 30)
+    		drawString("Start: $start", 16, 80, 30)
     	}
     	
     	if(mode != 3){
-    		text("Fin: $fin", 16, 96, 32)
+    		drawString("Fin: $fin", 16, 96, 32)
     	} else if(mode == 3){
-    		text("Fin: $fin", 16, 96, 30)
+    		drawString("Fin: $fin", 16, 96, 30)
     	}
     	
-    	text("A-Speed: $animSpeed", 16, 128, 32)
+    	drawString("A-Speed: $animSpeed", 16, 128, 32)
     	
     	switch(mode){
     		case 0:
-    			text("Mode: idle", 16, 112, 32)
+    			drawString("Mode: idle", 16, 112, 32)
     			break;
 			case 1:
-    			text("Mode: sheet edit", 16, 112, 32)
+    			drawString("Mode: sheet edit", 16, 112, 32)
     			break;
 			case 2:
-    			text("Mode: start edit", 16, 112, 32)
+    			drawString("Mode: start edit", 16, 112, 32)
     			break;
 			case 3:
-    			text("Mode: fin edit", 16, 112, 32)
+    			drawString("Mode: fin edit", 16, 112, 32)
     			break;
 			case 4:
-    			text("Mode: play", 16, 112, 32)
+    			drawString("Mode: play", 16, 112, 32)
     			break;
     		default:
     		
@@ -254,12 +254,12 @@ class SpriteViewer extends leikr.Engine {
     	}
     
     	//Background image
-		image("BG", 0,0)
-		drawColor(6)
-		rect(vx, vy, 1, 1)
+		drawTexture("BG", 0,0)
+		setColor(6)
+		drawRect(vx, vy, 1, 1)
 		//Mouse
-		drawColor(5)
-		line(mx, my, mx+4, my + 5)
+		setColor(5)
+		drawLineSegment(mx, my, mx+4, my + 5)
     }
 }
 

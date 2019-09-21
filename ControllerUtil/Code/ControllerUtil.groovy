@@ -325,15 +325,16 @@ class ControllerUtil extends leikr.Engine {
         bgColor("200,200,200")
         
         drawButtons()
-        image("controller",0,0)    
+        drawTexture("controller",0,0)   
+         
         if(ERROR || !activeController){
-            text("No controller active.", 0,0,1)
+            drawString("No controller active.", 0,0,1)
         }else{
             if(finished){
-            	text("Please Restart Leikr", 0,0,1)
+            	drawString("Please Restart Leikr", 0,0,1)
 
             }else{
-            	text("Please press: "+index, 0,0,1)
+            	drawString("Please press: "+index, 0,0,1)
 
             }
         }

@@ -2,8 +2,6 @@ import leikr.managers.LeikrScreenManager;
 import leikr.controls.LeikrController;
 import leikr.controls.LeikrKeyboard
 import Bolt
-import groovy.transform.CompileStatic
-@CompileStatic
 class Wizard{
     float x = 10 
     float y = 100 
@@ -61,7 +59,7 @@ class Wizard{
     	this.health = health
     }
     
-    boolean solid(LeikrScreenManager lsm, float x, float y){
+    boolean solid(LeikrScreenManager lsm, x, y){
         int cellid = getTile(lsm, x, y)
         if(	cellid > 60 && cellid < 170){
             return true
@@ -69,10 +67,10 @@ class Wizard{
         return false
     }	
     
-    int getTile(LeikrScreenManager lsm, float x, float y){
-        int mx = ((x)/8 ) as int
-        int my = ((y)/8 ) as int
-        return lsm.mapGet(mx,my)
+    int getTile(LeikrScreenManager lsm, x, y){
+        def mx = ((x)/8 )
+        def my = ((y)/8 )
+        return lsm.getMapTileId(mx,my)
     }
     
     void updateWizard(LeikrScreenManager lsm, LeikrKeyboard lk, LeikrController contrl, Bolt bolt){
@@ -159,7 +157,7 @@ class Wizard{
         }	
         
         if(bolt.charge == 30){
-            vx = (vx + (vx / 2)) as float
+            vx = (vx + (vx / 2))
             if(lk.key(right) && solid(lsm, x+8+vx, y)) vx = 0
             if(lk.key(left) && solid(lsm, x+vx, y)) vx = 0
         }
@@ -210,8 +208,8 @@ class Wizard{
     	}else{
             bolt.vx = 3
     	}
-    	bolt.x = (int)x
-    	bolt.y = (int)y
+    	bolt.x = x
+    	bolt.y = y
     	bolt.spid = bolt.spids[(bolt.charge/10).toInteger()]
     }
     
