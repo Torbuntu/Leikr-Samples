@@ -25,7 +25,7 @@ class LeikrShmup extends leikr.Engine {
         
         if(key("Left")) {
         	p.speedX = -3
-        	offX += 1	
+        	offX += 0	
         }
         if(key("Right")) {
         	p.speedX = 3
@@ -62,12 +62,12 @@ class LeikrShmup extends leikr.Engine {
     	drawTexture("exterior-parallaxBG1", offX+256, -35)
     	
     
-		p.draw(screen)
+		p.draw(Screen)
 		bullets.each{
-			it.draw(screen)
+			it.draw(Screen)
 		}
 		enemies.each{
-			it.draw(screen)
+			it.draw(Screen)
 		}
     }	
 }

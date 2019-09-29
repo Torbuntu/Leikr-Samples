@@ -404,12 +404,12 @@ class FoodChain extends leikr.Engine {
                 row.times{j->
                     if(i ==cx && j==cy){
                         if(cf > 10){
-                            jar[i][j].draw(screen,(96+ i*16),(16+j*16), true)
+                            jar[i][j].draw(Screen,(96+ i*16),(16+j*16), true)
                         }else{
-                            jar[i][j].draw(screen,(96+ i*16),(16+j*16), false)
+                            jar[i][j].draw(Screen,(96+ i*16),(16+j*16), false)
                         }	    				
                     }else{    				
-                        jar[i][j].draw(screen,(96+ i*16),(16+j*16))
+                        jar[i][j].draw(Screen,(96+ i*16),(16+j*16))
                     }
                 }
             }

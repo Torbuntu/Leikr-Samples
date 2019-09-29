@@ -12,7 +12,7 @@ class DogCat extends leikr.Engine {
     void create(){
         loadMap("map")
         playMusic("Map", true)
-        p  = new Player(screen)
+        p  = new Player(Screen)
     }  
     
     void update(float delta){
@@ -86,14 +86,14 @@ class DogCat extends leikr.Engine {
     
     void render(){	
     	if(menu.activeMenu) {
-            menu.drawMenu(screen)
+            menu.drawMenu(Screen)
             return
     	}
     	bgColor(10)
     	
         drawMap(mapX, mapY) 
 		
-        p.draw(screen)
+        p.draw(Screen)
         drawString("Coins: " + p.coin, 0,8,1)
     }	
     //End engine methods

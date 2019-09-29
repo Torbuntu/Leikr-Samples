@@ -41,7 +41,7 @@ class WizRobo extends leikr.Engine {
     }
     
     void movep(){        
-        wizard.updateWizard(screen, keyboard, controllerA, bolt)
+        wizard.updateWizard(Screen, Keyboard, ControllerA, bolt)
 		
        
         if(bolt.attack){
