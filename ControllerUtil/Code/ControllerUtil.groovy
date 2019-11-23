@@ -105,6 +105,7 @@ class ControllerUtil extends leikr.Engine {
     void create(){
         loadImages()
         //readDataProps()
+        if(lControllerA != null) activeController = true
     }
     void update(float delta){
         if(activeController){
@@ -328,13 +329,13 @@ class ControllerUtil extends leikr.Engine {
         drawTexture("controller",0,0)   
          
         if(ERROR || !activeController){
-            drawString("No controller active.", 0,0,1)
+            drawString(1, "No controller active.", 0,0)
         }else{
             if(finished){
-            	drawString("Please Restart Leikr", 0,0,1)
+            	drawString(1, "Please Restart Leikr", 0,0)
 
             }else{
-            	drawString("Please press: "+index, 0,0,1)
+            	drawString(1, "Please press: "+index, 0,0)
 
             }
         }
