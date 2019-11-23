@@ -180,7 +180,6 @@ class FoodChain extends leikr.Engine {
 	
     void create(){
         loadImages()      	
-       
     }
     
     //START UPDATE
@@ -377,12 +376,12 @@ class FoodChain extends leikr.Engine {
         case 0:
             drawTexture("title",0,0)
             if(blink > 10){
-                drawString("Press Space/Select", 58, 124, 120, 1, 16)
+                drawString(16, "Press Space/Select", 58, 124, 120, 1)
             }else{
-                drawString("Press Space/Select", 58, 124, 120, 1, 32)
+                drawString(32, "Press Space/Select", 58, 124, 120, 1)
             }
-            drawString("High Score: $high_score", 58, 108, 120, 1, 16)
-            drawString("High Score: $high_score", 59, 109, 120, 1, 32)
+            drawString(16, "High Score: $high_score", 58, 108, 120, 1)
+            drawString(32, "High Score: $high_score", 59, 109, 120, 1)
         		
     			
             break;
@@ -404,12 +403,12 @@ class FoodChain extends leikr.Engine {
                 row.times{j->
                     if(i ==cx && j==cy){
                         if(cf > 10){
-                            jar[i][j].draw(Screen,(96+ i*16),(16+j*16), true)
+                            jar[i][j].draw(lScreen,(96+ i*16),(16+j*16), true)
                         }else{
-                            jar[i][j].draw(Screen,(96+ i*16),(16+j*16), false)
+                            jar[i][j].draw(lScreen,(96+ i*16),(16+j*16), false)
                         }	    				
                     }else{    				
-                        jar[i][j].draw(Screen,(96+ i*16),(16+j*16))
+                        jar[i][j].draw(lScreen,(96+ i*16),(16+j*16))
                     }
                 }
             }
@@ -426,12 +425,13 @@ class FoodChain extends leikr.Engine {
             drawScores()
 	    		
             //Draw megaScore
-            setColor(23)	    		
-            fillRect(96, 7, megaScore, 4)
+            fillRect(23, 96, 7, megaScore, 4)
 	    		
             //draw available
-            if(available > 15) setColor(6)
-            fillRect(232, 144, 2, -available*4)
+            if(available > 15) fillRect(6, 232, 144, 2, -available*4)
+            else fillRect(23, 232, 144, 2, -available*4)
+            
+            
             if(available <= 4){
                 sprite(81, 229, 148)
             }
@@ -468,32 +468,31 @@ class FoodChain extends leikr.Engine {
             }
 	    		
             //temp
-            drawString("Level: $level", 8, 150, 18)
+            drawString(18, "Level: $level", 8, 150)
 	    	        		
             break;
         case 3:// Gameover condition
             8.times{
                 sprite(it, 56+it*16, 64+goWave[it], 1)
             }
-            drawString("GAME OVER", 0, 32, 240, 1, 32)
-            setColor(50)//black
+            drawString(32, "GAME OVER", 0, 32, 240, 1)
         		
-            fillRect(56, 122, 124, 60)
+            fillRect(50, 56, 122, 124, 60)
             if(blink > 10){        			
-                drawString("Press Space/Select", 58, 124, 120, 1, 16)
+                drawString(16, "Press Space/Select", 58, 124, 120, 1)
             }else{
-                drawString("Press Space/Select", 58, 124, 120, 1, 32)
+                drawString(32, "Press Space/Select", 58, 124, 120, 1)
             }
-            drawString("High Score: $high_score", 58, 108, 120, 1, 16)
-            drawString("High Score: $high_score", 59, 109, 120, 1, 32)
+            drawString(16, "High Score: $high_score", 58, 108, 120, 1)
+            drawString(32, "High Score: $high_score", 59, 109, 120, 1)
         		
             break;
         		
         case 4: //Acheivments
             drawTexture("awards", 0,0)
-            drawString("Acheivments", 0, 16, 240, 1, 32)
+            drawString(32, "Acheivments", 0, 16, 240, 1)
             drawAcheivments()
-            if(airEaten>0) drawString("Air eaten: $airEaten", 8, 130, 240, 0, 16)
+            if(airEaten>0) drawString(16, "Air eaten: $airEaten", 8, 130, 240, 0)
 				
 
             break;
@@ -856,22 +855,17 @@ class FoodChain extends leikr.Engine {
     //Draw cursor
     def drawCursor(){
     	if(usingSwap){
-            setColor(9)
-            drawRect((96+cx*16), (16+cy*16), 16, 16)
-            setColor(20)
-            drawRect((96+swapX*16), (16+swapY*16), 16, 16)
+            drawRect(9, (96+cx*16), (16+cy*16), 16, 16)
+            drawRect(20, (96+swapX*16), (16+swapY*16), 16, 16)
             //Draw line between the swapping tiles
-            setColor(22)
-            drawLineSegment((96+swapX*16)+8, (16+swapY*16)+8, (96+cx*16)+8, (16+cy*16)+8)
+            drawLineSegment(22, (96+swapX*16)+8, (16+swapY*16)+8, (96+cx*16)+8, (16+cy*16)+8)
             return
     	}
     	if(cf>10){
-            setColor(21)
-            drawRect((96+cx*16), (16+cy*16), 16, 16)
+            drawRect(21, (96+cx*16), (16+cy*16), 16, 16)
             drawFeastAvailable(true)
         }else{
-            setColor(24)
-            drawRect((96+cx*16), (16+cy*16), 16, 16)
+            drawRect(24, (96+cx*16), (16+cy*16), 16, 16)
             drawFeastAvailable(false)
         }
     }
@@ -900,37 +894,32 @@ class FoodChain extends leikr.Engine {
     
     //Draw the container scores:
     def drawScores(){
-        setColor(23)
-        fillRect(24, 48, 16, -meats)//meats
-        setColor(20)
-        fillRect(48, 48, 16, -veggies)//veggies
-        setColor(15)
-        fillRect(24, 112, 16, -fruits)//fruits
-        setColor(32)
-        fillRect(48, 112, 16, -drinks)//drinks
+        fillRect(23, 24, 48, 16, -meats)//meats
+        fillRect(20, 48, 48, 16, -veggies)//veggies
+        fillRect(15, 24, 112, 16, -fruits)//fruits
+        fillRect(32, 48, 112, 16, -drinks)//drinks
     }
     
     def drawInstructions(page){
-    	setColor(7)
-    	fillRect(0,0,240,160)//bg gray  
+    	bgColor(5)
     	if(page){
-            drawString("How to Play. Pg 2", 0, 0, 240, 1, 16)
+            drawString(16, "How to Play. Pg 2", 0, 0, 240, 1)
             sprite(34,0,0 )
     		
             sprite(10, 8, 16, 1)
-            drawString("Collect bombs to blast away 3x3 squares with chain reaction explosions! Use `Q` or Left Bumper.", 32, 16, 200, 32)
+            drawString(32, "Collect bombs to blast away 3x3 squares with chain reaction explosions! Use `Q` or Left Bumper.", 32, 16, 200)
     		
     		
             sprite(11, 8, 60, 1)
-            drawString("Collect swap tiles to be able to swap any two tiles on the board! Use `W` or Right Bumper.", 32, 60, 200, 32)
+            drawString(32, "Collect swap tiles to be able to swap any two tiles on the board! Use `W` or Right Bumper.", 32, 60, 200)
     		
-            drawString("Find the biggest combos to earn the most points to fill your hunger meter and progress to the next level.", 0, 100, 240, 32)
+            drawString(32, "Find the biggest combos to earn the most points to fill your hunger meter and progress to the next level.", 0, 100, 240)
     	}else{
             drawTexture("instruct", 0,0)
 			
-            drawString("How to Play. Pg 1", 0, 0, 240, 1, 16)
+            drawString(16, "How to Play. Pg 1", 0, 0, 240, 1)
 			
-            drawString("Fill these to activate a Feast!\nEach container holds a food type: Drinks, Veggies, Fruits or Meats.", 38,18, 200, 32)
+            drawString(32, "Fill these to activate a Feast!\nEach container holds a food type: Drinks, Veggies, Fruits or Meats.", 38,18, 200)
 			
             //Draw types
             8.times{
@@ -944,20 +933,20 @@ class FoodChain extends leikr.Engine {
             2.times{
                 sprite(34+it, 14+(it*9), 88)
             }
-            drawString("Move the cursor with Arrow Keys/D-pad\n`A` to make selection.",38,80, 200, 32 )
+            drawString(32, "Move the cursor with Arrow Keys/D-pad\n`A` to make selection.",38,80, 200)
 			
             //Hearts
             sprite(80, 8, 108)
-            drawString("Hearts are used up when you run out of moves. Each level earns an extra life!", 16, 108, 200, 32)
+            drawString(32, "Hearts are used up when you run out of moves. Each level earns an extra life!", 16, 108, 200)
             sprite(33, 232, 0)
     	}  
     	
         if(blink > 10){
-            drawString("Press Space/Select", 58, 142, 120, 1, 16)
+            drawString(16, "Press Space/Select", 58, 142, 120, 1)
 			
 			
         }else{
-            drawString("Press Space/Select", 58, 142, 120, 1, 32)
+            drawString(32, "Press Space/Select", 58, 142, 120, 1)
         }
     }
     
