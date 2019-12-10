@@ -7,7 +7,15 @@ import org.mini2Dx.core.input.*
 
 class FoodChain extends leikr.Engine {
 
-    int state = 0//0=title, 1=instructions, 2=Game play, 3=gameover, 4=Acheivments
+	public enum GameState {
+		TITLE,
+		INSTRUCTIONS,
+		GAME_PLAY,
+		GAME_OVER,
+		ACHEIVMENTS
+	}
+
+    GameState state = GameState.TITLE//0=title, 1=instructions, 2=Game play, 3=gameover, 4=Acheivments
     int bSpeed = 0, btnSpeed = 0, dropSpeed = 0, blink = 0, flipNext = 0
 
     boolean page = false//used for getting to page 2 of isntructions
@@ -66,7 +74,7 @@ class FoodChain extends leikr.Engine {
         starving = 200
         newAcheivmentIcon = 0
         achSpeed = 100
-        state = 0//0=title, 1=instructions, 2=Game play, 3=gameover, 4 = achievments
+        state = GameState.TITLE//0=title, 1=instructions, 2=Game play, 3=gameover, 4 = achievments
         bSpeed = 0
         dropSpeed = 0
         hungerSpeed = 0 
@@ -187,11 +195,11 @@ class FoodChain extends leikr.Engine {
     	bSpeed++
     	dropSpeed++
         switch(state){
-        case 0:
+        case GameState.TITLE:
             playMusic("title", true)
             if(keyPress("Space") || bp("SELECT")) {
                 playSound("start")
-                state++
+                state = GameState.INSTRUCTIONS
                 col.times{i->
                     row.times{j->
                         jar[i][j] = new Food(randInt(7), randInt(100))
@@ -201,13 +209,13 @@ class FoodChain extends leikr.Engine {
             if(blink > 20) blink = 0
             blink++
             break;
-        case 1://Instructions
+        case GameState.INSTRUCTIONS://Instructions
             if(blink > 20) blink = 0
             blink++
             if(keyPress("Space") || bp("SELECT") ){
                 playSound("start")
                 stopAllMusic()
-                state++
+                state = GameState.GAME_PLAY
             }
         		
             if(keyPress("Left") || bp("LEFT")){
@@ -221,7 +229,7 @@ class FoodChain extends leikr.Engine {
             }
         		
             break;
-        case 2://Game play
+        case GameState.GAME_PLAY://Game play
             if(flipNext > 20) flipNext = 0
             if(cf > 20) cf = 0
             cf++
@@ -303,7 +311,7 @@ class FoodChain extends leikr.Engine {
                     resetBoard()
                     megaScore = megaScore - 46
                 }else{        				
-                    state=3//game over
+                    state= GameState.GAME_OVER//game over
                 }
             }
             if(available > 32) available = 32
@@ -342,7 +350,7 @@ class FoodChain extends leikr.Engine {
             }
         		
             if(lives == 0){
-                state = 3
+                state = GameState.GAME_OVER
                 saveUtil.saveScore(high_score)
             }
             //CHECK ACHEIVMENTS
@@ -351,7 +359,7 @@ class FoodChain extends leikr.Engine {
         		
         		
             break;
-        case 3://Game over
+        case GameState.GAME_OVER://Game over
             if(keyPress("Space") ){
                 init()
                 playSound("shift")
@@ -359,9 +367,9 @@ class FoodChain extends leikr.Engine {
             if(blink > 20) blink = 0
             blink++
             break;
-        case 4: //Acheivments
+        case GameState.ACHEIVMENTS: //Acheivments
             if(keyPress("Space") ){
-                state = 2
+                state = GameState.GAME_PLAY
                 playSound("shift")
             }
         		
@@ -373,22 +381,22 @@ class FoodChain extends leikr.Engine {
     //START RENDER
     void render(){	
         switch(state){
-        case 0:
+        case GameState.TITLE:
             drawTexture("title",0,0)
             if(blink > 10){
-                drawString(16, "Press Space/Select", 58, 124, 120, 1)
-            }else{
                 drawString(32, "Press Space/Select", 58, 124, 120, 1)
+            }else{
+                drawString(1, "Press Space/Select", 58, 124, 120, 1)
             }
-            drawString(16, "High Score: $high_score", 58, 108, 120, 1)
-            drawString(32, "High Score: $high_score", 59, 109, 120, 1)
+            drawString(32, "High Score: $high_score", 58, 108, 120, 1)
+            drawString(1, "High Score: $high_score", 59, 109, 120, 1)
         		
     			
             break;
-        case 1:
+        case GameState.INSTRUCTIONS:
             drawInstructions(page)
             break;
-        case 2://game play
+        case GameState.GAME_PLAY://game play
             //background image. Obvi
             if(shake>0){
                 bgX = randInt(-2, 2)
@@ -425,11 +433,11 @@ class FoodChain extends leikr.Engine {
             drawScores()
 	    		
             //Draw megaScore
-            fillRect(23, 96, 7, megaScore, 4)
+            fillRect(8, 96, 7, megaScore, 4)
 	    		
             //draw available
-            if(available > 15) fillRect(6, 232, 144, 2, -available*4)
-            else fillRect(23, 232, 144, 2, -available*4)
+            if(available > 15) fillRect(20, 232, 144, 2, -available*4)
+            else fillRect(8, 232, 144, 2, -available*4)
             
             
             if(available <= 4){
@@ -471,7 +479,8 @@ class FoodChain extends leikr.Engine {
             drawString(18, "Level: $level", 8, 150)
 	    	        		
             break;
-        case 3:// Gameover condition
+        case GameState.GAME_OVER:// Gameover condition
+	        bgColor(0)
             8.times{
                 sprite(it, 56+it*16, 64+goWave[it], 1)
             }
@@ -479,20 +488,20 @@ class FoodChain extends leikr.Engine {
         		
             fillRect(50, 56, 122, 124, 60)
             if(blink > 10){        			
-                drawString(16, "Press Space/Select", 58, 124, 120, 1)
-            }else{
                 drawString(32, "Press Space/Select", 58, 124, 120, 1)
+            }else{
+                drawString(1, "Press Space/Select", 58, 124, 120, 1)
             }
-            drawString(16, "High Score: $high_score", 58, 108, 120, 1)
-            drawString(32, "High Score: $high_score", 59, 109, 120, 1)
+            drawString(32, "High Score: $high_score", 58, 108, 120, 1)
+            drawString(1, "High Score: $high_score", 59, 109, 120, 1)
         		
             break;
         		
-        case 4: //Acheivments
+        case GameState.ACHEIVMENTS: //Acheivments
             drawTexture("awards", 0,0)
-            drawString(32, "Acheivments", 0, 16, 240, 1)
+            drawString(1, "Acheivments", 0, 16, 240, 1)
             drawAcheivments()
-            if(airEaten>0) drawString(16, "Air eaten: $airEaten", 8, 130, 240, 0)
+            if(airEaten>0) drawString(32, "Air eaten: $airEaten", 8, 130, 240, 0)
 				
 
             break;
@@ -751,7 +760,7 @@ class FoodChain extends leikr.Engine {
 		
         //ENTER ACHEIVMENT PAGE
         if(keyPress("Space") ) {
-            state = 4
+            state = GameState.ACHEIVMENTS
             playSound("shift")
         }  
 		
@@ -873,16 +882,16 @@ class FoodChain extends leikr.Engine {
     def drawFeastAvailable(boolean a){
     	if(a){
             if(meats == 41)
-            spriteSc(65, 29, 55, 0)
+            spriteSc(65, 29, 55, 1)
             if(veggies == 41)
-            spriteSc(66, 53, 55, 0)
+            spriteSc(66, 53, 55, 1)
             if(fruits == 41)
-            spriteSc(67, 29, 120, 0)
+            spriteSc(67, 29, 120, 1)
             if(drinks == 41)
-            spriteSc(68, 53, 120, 0)
+            spriteSc(68, 53, 120, 1)
         }else{
             if(meats == 41)
-            spriteSc(65, 29, 55, 0.5f)
+            spriteSc(65, 29, 55, 0.5f )
             if(veggies == 41)
             spriteSc(66, 53, 55, 0.5f)
             if(fruits == 41)	
@@ -894,32 +903,32 @@ class FoodChain extends leikr.Engine {
     
     //Draw the container scores:
     def drawScores(){
-        fillRect(23, 24, 48, 16, -meats)//meats
-        fillRect(20, 48, 48, 16, -veggies)//veggies
+        fillRect(8, 24, 48, 16, -meats)//meats
+        fillRect(26, 48, 48, 16, -veggies)//veggies
         fillRect(15, 24, 112, 16, -fruits)//fruits
-        fillRect(32, 48, 112, 16, -drinks)//drinks
+        fillRect(1, 48, 112, 16, -drinks)//drinks
     }
     
     def drawInstructions(page){
     	bgColor(5)
     	if(page){
-            drawString(16, "How to Play. Pg 2", 0, 0, 240, 1)
+            drawString(32, "How to Play. Pg 2", 0, 0, 240, 1)
             sprite(34,0,0 )
     		
             sprite(10, 8, 16, 1)
-            drawString(32, "Collect bombs to blast away 3x3 squares with chain reaction explosions! Use `Q` or Left Bumper.", 32, 16, 200)
+            drawString(1, "Collect bombs to blast away 3x3 squares with chain reaction explosions! Use `Q` or Left Bumper.", 32, 16, 200)
     		
     		
             sprite(11, 8, 60, 1)
-            drawString(32, "Collect swap tiles to be able to swap any two tiles on the board! Use `W` or Right Bumper.", 32, 60, 200)
+            drawString(1, "Collect swap tiles to be able to swap any two tiles on the board! Use `W` or Right Bumper.", 32, 60, 200)
     		
-            drawString(32, "Find the biggest combos to earn the most points to fill your hunger meter and progress to the next level.", 0, 100, 240)
+            drawString(1, "Find the biggest combos to earn the most points to fill your hunger meter and progress to the next level.", 0, 100, 240)
     	}else{
             drawTexture("instruct", 0,0)
 			
-            drawString(16, "How to Play. Pg 1", 0, 0, 240, 1)
+            drawString(32, "How to Play. Pg 1", 0, 0, 240, 1)
 			
-            drawString(32, "Fill these to activate a Feast!\nEach container holds a food type: Drinks, Veggies, Fruits or Meats.", 38,18, 200)
+            drawString(1, "Fill these to activate a Feast!\nEach container holds a food type: Drinks, Veggies, Fruits or Meats.", 38,18, 200)
 			
             //Draw types
             8.times{
@@ -933,20 +942,18 @@ class FoodChain extends leikr.Engine {
             2.times{
                 sprite(34+it, 14+(it*9), 88)
             }
-            drawString(32, "Move the cursor with Arrow Keys/D-pad\n`A` to make selection.",38,80, 200)
+            drawString(1, "Move the cursor with Arrow Keys/D-pad\n`A` to make selection.",38,80, 200)
 			
             //Hearts
             sprite(80, 8, 108)
-            drawString(32, "Hearts are used up when you run out of moves. Each level earns an extra life!", 16, 108, 200)
+            drawString(1, "Hearts are used up when you run out of moves. Each level earns an extra life!", 16, 108, 200)
             sprite(33, 232, 0)
     	}  
     	
         if(blink > 10){
-            drawString(16, "Press Space/Select", 58, 142, 120, 1)
-			
-			
-        }else{
             drawString(32, "Press Space/Select", 58, 142, 120, 1)
+        }else{
+            drawString(1, "Press Space/Select", 58, 142, 120, 1)
         }
     }
     
