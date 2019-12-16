@@ -4,6 +4,17 @@ class DrawDemo extends leikr.Engine {
 	
 	def angle = 0, angleInc = Math.PI/360.0
 	def boxW = 0, boxH = 0, boxS = 1
+	
+	//Define a few Color objects to use
+	def RED 
+	def GREEN  
+	def BLUE 
+	
+	void create(){
+		RED = getColor("255,0,0")
+		GREEN = getColor("0,255,0")
+		BLUE = getColor("0,0,255")
+	}
     void update(float delta){
         t++
         
@@ -42,6 +53,9 @@ class DrawDemo extends leikr.Engine {
 		drawPixel 32, 10, 10 //magenta pixel in top left 10,10
 		drawPixel "50,50,155", 10,8 //sort of blue pixel above the other
 		
+		//Get the Color object from coordinates and pass to drawPixel
+		drawPixel getPixel(17, 10), 10, 20
+		
 		//These are of course more fun for doing fancy drawing patterns.
 		200.times{i->
 			def d = cos(t/5 + i/2)  * 5
@@ -62,6 +76,7 @@ class DrawDemo extends leikr.Engine {
 		*/
 		drawRect 10, 5, 45, 10, 10 //blue box
 		drawRect "255,100,255", 5, 60, 5, 5//magenta box using RGB String
+		drawRect GREEN, 11, 60, 4, 4
 		
 		drawRect(8, 20, 45, boxW, boxH) //red box with dynamic width and height
 		drawRect "0,200,200", boxW+35, boxH+42, 10, 10 //cyan dynamic moving box
@@ -77,6 +92,8 @@ class DrawDemo extends leikr.Engine {
 		
 		fillRect 8, 5, 85, 10, 10 //solid red square
 		fillRect "0,255,100", 5, 100, 5, 5 //smaller green square with RGB String
+		fillRect BLUE, 11, 100, 4, 4
+		
 		
 		fillRect(18, 20, 85, boxW, boxH) //red box with dynamic width and height
 		fillRect "0,200,200", boxW+35, boxH+82, 10, 10 //cyan dynamic moving box
@@ -89,8 +106,10 @@ class DrawDemo extends leikr.Engine {
 		Drawing circles is just as easy as drawing rectangles.
 		*/
 		
-		drawCircle 16, 15, 135, 10
-		drawCircle "128,0,128", 15, 135, 5
+		drawCircle 16, 15, 135, 12
+		drawCircle "128,0,128", 15, 135, 8
+		drawCircle RED, 15, 135, 5
+		
 		drawCircle "${50+t%155},${100+t%105},${t%255}", 45, 135, r
 		drawCircle "${50+r%155},${100+t%105},${r%255}", 45, 135, r/2
 		
@@ -101,8 +120,10 @@ class DrawDemo extends leikr.Engine {
 		`fillCircle c, x, y, r`
 		Fill circle is just like drawCircle but filled, of course.
 		*/
-		fillCircle 16, 85, 135, 10
-		fillCircle "128,0,128", 85, 135, 5
+		fillCircle 16, 85, 135, 12
+		fillCircle "128,0,128", 85, 135, 8
+		fillCircle BLUE, 85, 135, 5
+		
 		fillCircle "${50+t%155},${100+t%105},${t%255}", 115, 135, r
 		fillCircle "${50+r%155},${100+t%105},${r%255}", 115, 135, r/2
 		
@@ -117,6 +138,7 @@ class DrawDemo extends leikr.Engine {
 		
 		drawLineSegment 32, point.a.x, point.a.y, point.b.x, point.b.y
 		drawLineSegment "0,100,200", point.a.x, point.a.y, point.b.x+10, point.b.y+10
+		drawLineSegment GREEN, point.b.x, point.b.y, point.a.x+15, point.a.y
 		drawString 7, "Draw Line Segment", point.b.x-15, point.b.y
     }
 }
