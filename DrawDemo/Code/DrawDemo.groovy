@@ -37,6 +37,7 @@ class DrawDemo extends leikr.Engine {
     }
     void render(){	
 		bgColor(3)
+		sprite(0,0,0,1)
 		
 		/*
 		`drawPixel c, x, y`
@@ -140,6 +141,10 @@ class DrawDemo extends leikr.Engine {
 		drawLineSegment "0,100,200", point.a.x, point.a.y, point.b.x+10, point.b.y+10
 		drawLineSegment GREEN, point.b.x, point.b.y, point.a.x+15, point.a.y
 		drawString 7, "Draw Line Segment", point.b.x-15, point.b.y
+		
+		
+		//Test
+		drawCircle(1, 200, 150, 5)
     }
 }
 

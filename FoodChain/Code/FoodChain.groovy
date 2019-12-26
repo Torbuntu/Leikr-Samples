@@ -122,72 +122,18 @@ class FoodChain extends leikr.Engine {
     public void onButtonDown(GamePad cont, int buttonId){
         println("::: Debug Button :::")
     	println("Controller: $cont , Value: $buttonId")
-//        switch(state){
-//        case 2:
-//            if(buttonId == btnCode("SELECT")){
-//                state = 4
-//                playSound("shift")
-//            }
-//            if(usingSwap){
-//                moveCursor()
-//                if(buttonId == btnCode("RIGHT_BUMPER")){
-//                    doSwap(cx, cy)
-//                }
-//                return
-//            }
-//            if(buttonId == btnCode("RIGHT_BUMPER") && swaps > 0){
-//                swapStart(cx, cy)
-//                return
-//            }
-//            break;
-//        case 3:
-//            if(buttonId == btnCode("SELECT") ){
-//                init()
-//                playSound("shift")
-//            }
-//            break;
-//        case 4:
-//            if(buttonId == btnCode("SELECT")){
-//                state = 2
-//                playSound("shift")
-//            }
-//            break;
-//        default:
-//            break;
-//        				
-//        }
     }
     @Override
     public void onAxisChanged(GamePad controller, int axisCode, float buttonId) {
     	println("::: Debug Axis :::")
-    	println("Controller: $controller , Axis: $axisCode , Value: $buttonId")
-//        if(state == 2){
-//            if (axisCode == verticalAxis()) {
-//                if(buttonId == btnCode("UP") && cy > 0){
-//                    cy--
-//                }
-//                if(buttonId == btnCode("DOWN") && cy < 7){
-//                    cy++
-//                }
-//            }
-//            if (axisCode == horizontalAxis()) {
-//                if (buttonId == btnCode("RIGHT") && cx < 7) {
-//                    cx++
-//                }
-//                if (buttonId == btnCode("LEFT") && cx > 0) {
-//                    cx--
-//                }
-//					
-//            }
-//        }
-				
+    	println("Controller: $controller , Axis: $axisCode , Value: $buttonId")				
     }
 	
 	
 	
 	
     void create(){
-        loadImages()      	
+        loadImages()  
     }
     
     //START UPDATE
@@ -196,9 +142,9 @@ class FoodChain extends leikr.Engine {
     	dropSpeed++
         switch(state){
         case GameState.TITLE:
-            playMusic("title", true)
+            playMusic("title.wav", true)
             if(keyPress("Space") || bp("SELECT")) {
-                playSound("start")
+                playSound("start.wav")
                 state = GameState.INSTRUCTIONS
                 col.times{i->
                     row.times{j->
@@ -213,18 +159,18 @@ class FoodChain extends leikr.Engine {
             if(blink > 20) blink = 0
             blink++
             if(keyPress("Space") || bp("SELECT") ){
-                playSound("start")
+                playSound("start.wav")
                 stopAllMusic()
                 state = GameState.GAME_PLAY
             }
         		
             if(keyPress("Left") || bp("LEFT")){
-                playSound("shift")
+                playSound("shift.wav")
                 page = false
             }
         		
             if(keyPress("Right") || bp("RIGHT") ){
-                playSound("shift")
+                playSound("shift.wav")
                 page = true
             }
         		
@@ -305,7 +251,7 @@ class FoodChain extends leikr.Engine {
             //CHECL AVAILABLE MOVES
             if(!movesExist()){
                 if(lives > 0){
-                    playSound("noMove")
+                    playSound("noMove.wav")
                     shake = 15
                     lives--
                     resetBoard()
@@ -333,7 +279,7 @@ class FoodChain extends leikr.Engine {
                 high_score = level
                 saveUtil.saveScore(high_score)
                 lives++
-                playSound("lifeUp")        			
+                playSound("lifeUp.wav")        			
                 if(lives>9) lives = 10
             }
             if(megaScore == 0){
@@ -341,7 +287,7 @@ class FoodChain extends leikr.Engine {
                 if(starving == 0){
                     starving = 200
                     lives--
-                    playSound("noMove")
+                    playSound("noMove.wav")
                     shake = 15
                 }
             }
@@ -362,7 +308,7 @@ class FoodChain extends leikr.Engine {
         case GameState.GAME_OVER://Game over
             if(keyPress("Space") ){
                 init()
-                playSound("shift")
+                playSound("shift.wav")
             }
             if(blink > 20) blink = 0
             blink++
@@ -370,7 +316,7 @@ class FoodChain extends leikr.Engine {
         case GameState.ACHEIVMENTS: //Acheivments
             if(keyPress("Space") ){
                 state = GameState.GAME_PLAY
-                playSound("shift")
+                playSound("shift.wav")
             }
         		
             break;
@@ -382,7 +328,7 @@ class FoodChain extends leikr.Engine {
     void render(){	
         switch(state){
         case GameState.TITLE:
-            drawTexture("title",0,0)
+            drawTexture("title.png",0,0)
             if(blink > 10){
                 drawString(32, "Press Space/Select", 58, 124, 120, 1)
             }else{
@@ -404,7 +350,7 @@ class FoodChain extends leikr.Engine {
             }else{
                 bgX = 0
             }
-            drawTexture("bg",bgX,bgY)
+            drawTexture("bg.png",bgX,bgY)
         		
             //Draws the items in the jar
             col.times{i->
@@ -498,7 +444,7 @@ class FoodChain extends leikr.Engine {
             break;
         		
         case GameState.ACHEIVMENTS: //Acheivments
-            drawTexture("awards", 0,0)
+            drawTexture("awards.png", 0,0)
             drawString(1, "Acheivments", 0, 16, 240, 1)
             drawAcheivments()
             if(airEaten>0) drawString(32, "Air eaten: $airEaten", 8, 130, 240, 0)
@@ -548,14 +494,14 @@ class FoodChain extends leikr.Engine {
             bombs++
             if(bombs>10)bombs=10
             jar[x][y].type = 8
-            playSound("item")
+            playSound("item.wav")
             return
         }
         if(tp == 11){
             swaps++
             if(swaps>10)swaps=10
             jar[x][y].type = 8
-            playSound("item")
+            playSound("item.wav")
             return
         }
         //If no matches on any sides in middle.
@@ -563,13 +509,13 @@ class FoodChain extends leikr.Engine {
             && (x < col-1 && jar[x+1][y].type != tp || x == 7) 
             && (y > 0 && jar[x][y-1].type != tp || y == 0) 
             && (y < row-1 && jar[x][y+1].type != tp || y == 7) ) {
-            playSound("select")
+            playSound("select.wav")
             return
         }
 
 	    
     	jar[x][y].type = 8
-    	playSound("eat")
+    	playSound("eat.wav")
     	int score = matchesScoring(tp, x, y)
       	
     	foodTypeScoreCheck(tp, score)
@@ -746,7 +692,7 @@ class FoodChain extends leikr.Engine {
     	jar[x][y].type = temp
     	usingSwap = false
     	swaps--
-    	playSound("swap")
+    	playSound("swap.wav")
     }
     //END SWAP POWER
     
@@ -761,7 +707,7 @@ class FoodChain extends leikr.Engine {
         //ENTER ACHEIVMENT PAGE
         if(keyPress("Space") ) {
             state = GameState.ACHEIVMENTS
-            playSound("shift")
+            playSound("shift.wav")
         }  
 		
         if(usingSwap){
@@ -774,32 +720,32 @@ class FoodChain extends leikr.Engine {
 		
         //Check for Super usage input
         if(mSuper && (keyPress("X") || bp("X") )){
-            playSound("feast")
+            playSound("feast.wav")
             mSuper = false
             megaScore += supers.useSuper(jar, 6, 7)
             meats = 0
         }
         if(vSuper && (keyPress("Y") || bp("Y"))){
-            playSound("feast")
+            playSound("feast.wav")
             vSuper = false
             megaScore += supers.useSuper(jar, 2, 3)
             veggies = 0
         }
         if(fSuper && (keyPress("Z") || bp("X") )){
-            playSound("feast")
+            playSound("feast.wav")
             fSuper = false
             megaScore += supers.useSuper(jar, 4, 5)
             fruits = 0
         }
         if(dSuper && (keyPress("B") || bp("B") )){
-            playSound("feast")
+            playSound("feast.wav")
             dSuper = false
             megaScore += supers.useSuper(jar, 0, 1)
             drinks = 0
         }
         //Bombs or Swaps
         if( (keyPress("Q") || (bp("LEFT_BUMPER"))) && bombs > 0){
-            playSound("bomb")
+            playSound("bomb.wav")
             bombs--
             explode(cx, cy)
         }
@@ -924,7 +870,7 @@ class FoodChain extends leikr.Engine {
     		
             drawString(1, "Find the biggest combos to earn the most points to fill your hunger meter and progress to the next level.", 0, 100, 240)
     	}else{
-            drawTexture("instruct", 0,0)
+            drawTexture("instruct.png", 0,0)
 			
             drawString(32, "How to Play. Pg 1", 0, 0, 240, 1)
 			
@@ -959,54 +905,54 @@ class FoodChain extends leikr.Engine {
     
     def checkAcheivments(){
     	if(level >= 5 && !aFive) {
-            playSound("award")
+            playSound("award.wav")
             aFive = true
             newAcheivmentIcon = achSpeed
     	}
     	if(level >= 10 && !aTen) {
-            playSound("award")
+            playSound("award.wav")
             aTen = true
             newAcheivmentIcon = achSpeed
     	}
     	if(level >= 15 && !aFifteen){
-            playSound("award")
+            playSound("award.wav")
             aFifteen = true
             newAcheivmentIcon = achSpeed
     	} 
     	if(level >= 20 && !aTwenty){
-            playSound("award")
+            playSound("award.wav")
             aTwenty = true
             newAcheivmentIcon = achSpeed
     	} 
     	
     	if(bombs == 10 && !aBombBastic){
-            playSound("award")
+            playSound("award.wav")
             aBombBastic = true
             newAcheivmentIcon = achSpeed
     	} 
     	if(swaps == 10 && !aYeOleSwitcheroo){
-            playSound("award")
+            playSound("award.wav")
             aYeOleSwitcheroo = true
             newAcheivmentIcon = achSpeed
     	} 
     	
     	if(meats >= 40 && !aMeatPump) {
-            playSound("award")
+            playSound("award.wav")
             aMeatPump = true
             newAcheivmentIcon = achSpeed
     	}
     	if(veggies >= 40 && !aGrassGreener) {
-            playSound("award")
+            playSound("award.wav")
             aGrassGreener = true
             newAcheivmentIcon = achSpeed
     	}
     	if(fruits >= 40 && !aAllOrangeJuice) {
-            playSound("award")
+            playSound("award.wav")
             aAllOrangeJuice = true
             newAcheivmentIcon = achSpeed
     	}
     	if(drinks >= 40 && !aDairyQueen) {
-            playSound("award")
+            playSound("award.wav")
             newAcheivmentIcon = achSpeed
             aDairyQueen = true
     	}

@@ -49,7 +49,7 @@ class AudioDemo extends leikr.Engine {
         
         if(keyPress("S")){
         	String n = files[soundIndex].getName()
-        	playSound n.substring(0, n.lastIndexOf(".")), 1f, 1f, pan
+        	playSound n, 1f, 1f, pan
         }
         
         offset = 0
