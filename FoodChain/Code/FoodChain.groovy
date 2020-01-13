@@ -553,7 +553,7 @@ class FoodChain extends leikr.Engine {
         int score = matchesScoring(tp, x, y)
         foodTypeScoreCheck(tp, score)
     }
-
+    
     def matchesScoring(tp, x, y){
     	int score = -3//sets the score correctly for the i variable offset
 
@@ -866,7 +866,6 @@ class FoodChain extends leikr.Engine {
 
             sprite(10, 8, 16, 1)
             drawString(1, "Collect bombs to blast away 3x3 squares with chain reaction explosions! Use `Q` or Left Bumper.", 32, 16, 200)
-
 
             sprite(11, 8, 60, 1)
             drawString(1, "Collect swap tiles to be able to swap any two tiles on the board! Use `W` or Right Bumper.", 32, 60, 200)
