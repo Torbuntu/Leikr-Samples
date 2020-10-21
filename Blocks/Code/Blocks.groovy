@@ -62,6 +62,8 @@ class Blocks extends leikr.Engine {
 			piece.rotate()
 		}else if(keyPress("Z")){
 			piece.rotateB()
+		}else if(keyPress("C")){
+			hold()
 		}else if(keyPress("Right")){
 			piece.moveRight()
 		}else if(keyPress("Down")){
@@ -71,6 +73,23 @@ class Blocks extends leikr.Engine {
 		}
 		
 		drop()
+	}
+	
+	def holding = false
+	def held
+	void hold(){
+		if(!holding) {
+			holding = true
+			held = piece
+			piece = next
+			next = randomPiece()
+		}else{
+			def t = piece
+			piece = held
+			held = t
+			piece.x = 3
+			piece.y = -2
+		}
 	}
 	
 	void render(){
@@ -87,6 +106,11 @@ class Blocks extends leikr.Engine {
 		piece.draw()
 		next.drawNext(12, 4)
 		drawString(1, "NEXT", 164, 16) 
+		if(holding){
+			drawString(1, "HELD", 164, 50) 
+			held.drawNext(12, 10)
+			
+		}
 		
 		drawString(1, "Score: $score", 10, 30)
 		drawString(1, "Lines: $lines", 10, 40)
@@ -234,7 +258,6 @@ class Blocks extends leikr.Engine {
 				this.activeTetromino = this.tetromino[this.tetrominoN];
 			}
 		}
-		
 		
 		def lock(){
 			for(int r = 0; r < this.activeTetromino.size; r++){
