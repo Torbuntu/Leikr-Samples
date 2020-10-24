@@ -5,8 +5,8 @@
 class Blocks extends leikr.Engine {
 	int ROW = 20, COL = 10, SQ = 7, EMPTY = 0, score = 0, lines = 0
 	def board
-	def piece, next
-	def gameOver = false
+	def piece, next, ghostPiece
+	def gameOver = false, ghost = false
 	
 	def singleScore = 0, doubleScore = 0, tripleScore = 0, tetrisScore = 0
 	
@@ -58,18 +58,42 @@ class Blocks extends leikr.Engine {
 	
 		if(keyPress("Left")){
 			piece.moveLeft()
+			if(ghost) {
+				ghostPiece.y=piece.y
+				ghostPiece.moveLeft()
+			}
 		}else if(keyPress("Up")){
 			piece.rotate()
+			if(ghost) {
+				ghostPiece.y=piece.y
+				ghostPiece.rotate()
+			}
 		}else if(keyPress("Z")){
 			piece.rotateB()
+			if(ghost) {
+				ghostPiece.y=piece.y
+				ghostPiece.rotateB()
+			}
 		}else if(keyPress("C")){
 			hold()
 		}else if(keyPress("Right")){
 			piece.moveRight()
+			if(ghost) {
+				ghostPiece.y=piece.y
+				ghostPiece.moveRight()
+			}
 		}else if(keyPress("Down")){
 			piece.moveDown()
 		}else if(keyPress("Space")){
 			piece.down()
+		}else if(keyPress("G")){
+			ghost = !ghost
+			if(ghost) {
+				ghostPiece = new Piece(piece.tetromino, 3)
+				ghostPiece.x = piece.x
+				ghostPiece.tetrominoN = piece.tetrominoN
+				ghostPiece.activeTetromino = piece.activeTetromino
+			}
 		}
 		
 		drop()
@@ -83,12 +107,14 @@ class Blocks extends leikr.Engine {
 			held = piece
 			piece = next
 			next = randomPiece()
+			if(ghost) ghostPiece = new Piece(piece.tetromino, 3)
 		}else{
 			def t = piece
 			piece = held
 			held = t
 			piece.x = 3
 			piece.y = -2
+			if(ghost) ghostPiece = new Piece(piece.tetromino, 3)
 		}
 	}
 	
@@ -103,13 +129,16 @@ class Blocks extends leikr.Engine {
 		//field
 		drawRect(1, 76, 0, 72, 138)
 		drawBoard()
+		if(ghost){
+			ghostPiece.drawGhost()
+		}
 		piece.draw()
+
 		next.drawNext(12, 4)
 		drawString(1, "NEXT", 164, 16) 
 		if(holding){
 			drawString(1, "HELD", 164, 50) 
-			held.drawNext(12, 10)
-			
+			held.drawNext(12, 10)			
 		}
 		
 		drawString(1, "Score: $score", 10, 30)
@@ -201,6 +230,7 @@ class Blocks extends leikr.Engine {
 				this.lock()
 				piece = next
 				next = randomPiece()
+				if(ghost) ghostPiece = new Piece(piece.tetromino, 3)
 			}
 		}
 		def down(){
@@ -211,6 +241,19 @@ class Blocks extends leikr.Engine {
 			this.lock()
 			piece = next
 			next = randomPiece()
+			if(ghost) ghostPiece = new Piece(piece.tetromino, 3)
+		}
+		def drawGhost(){
+			while(!collision(0,1,this.activeTetromino)){
+				this.y++
+			}
+			activeTetromino.size.times{r->
+				activeTetromino.size.times{c->
+					if(activeTetromino[r][c]){
+						drawSquare(x+c, y+r, color)
+					}
+				}
+			}
 		}
 		def moveRight(){
 			if(!collision(1,0,this.activeTetromino)){
@@ -428,10 +471,8 @@ class Tetrominoe{
 
 	static def O = [
 		[
-			[0, 0, 0, 0],
-			[0, 1, 1, 0],
-			[0, 1, 1, 0],
-			[0, 0, 0, 0],
+			[1, 1],
+			[1, 1],
 		]
 	];
 
@@ -440,16 +481,6 @@ class Tetrominoe{
 			[0, 1, 1],
 			[1, 1, 0],
 			[0, 0, 0]
-		],
-		[
-			[0, 1, 0],
-			[0, 1, 1],
-			[0, 0, 1]
-		],
-		[
-			[0, 0, 0],
-			[0, 1, 1],
-			[1, 1, 0]
 		],
 		[
 			[1, 0, 0],
@@ -491,16 +522,6 @@ class Tetrominoe{
 			[0, 0, 1],
 			[0, 1, 1],
 			[0, 1, 0]
-		],
-		[
-			[0, 0, 0],
-			[1, 1, 0],
-			[0, 1, 1]
-		],
-		[
-			[0, 1, 0],
-			[1, 1, 0],
-			[1, 0, 0]
 		]
 	];
 }
