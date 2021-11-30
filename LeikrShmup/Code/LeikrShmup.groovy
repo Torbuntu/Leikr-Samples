@@ -1,7 +1,3 @@
-import Bullet
-import Enemy
-import Player
-
 class LeikrShmup extends leikr.Engine {
 	
 	Player p = new Player()
@@ -50,24 +46,24 @@ class LeikrShmup extends leikr.Engine {
         	if(e.x < 0) e.gone = true
         }
         
-        //Remove enemies and bullets if they are off the screen or hit.
+        //Remove enemies and bullets if they are off the lGraphics or hit.
         enemies.removeAll{it.hit == true}
         enemies.removeAll{it.gone == true}
         bullets.removeAll{it.gone == true}
     }
     
     void render(){	
-    	drawTexture("exterior-parallaxBG1", offX-256, -35)
-    	drawTexture("exterior-parallaxBG1", offX, -35)
-    	drawTexture("exterior-parallaxBG1", offX+256, -35)
+    	drawTexture("exterior-parallaxBG1.png", offX-256, -35)
+    	drawTexture("exterior-parallaxBG1.png", offX, -35)
+    	drawTexture("exterior-parallaxBG1.png", offX+256, -35)
     	
     
-		p.draw(Screen)
+		p.draw(lGraphics)
 		bullets.each{
-			it.draw(Screen)
+			it.draw(lGraphics)
 		}
 		enemies.each{
-			it.draw(Screen)
+			it.draw(lGraphics)
 		}
     }	
 }

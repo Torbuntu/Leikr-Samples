@@ -1,9 +1,7 @@
 import Supers
 import SaveUtil
-import leikr.GameRuntime;//haaaaaack
-import Food
 
-import org.mini2Dx.core.input.*
+import Food
 
 class FoodChain extends leikr.Engine {
 
@@ -14,6 +12,19 @@ class FoodChain extends leikr.Engine {
 		GAME_OVER,
 		ACHEIVMENTS
 	}
+	
+	def acheivments = [
+		aDairyQueen: false,
+		aMeatPump: false, 
+		aGrassGreener: false,
+		aAllOrangeJuice: false,
+		aFive: false,
+		aTen: false,
+		aFifteen: false,
+		aTwenty: false,
+		aBombBastic: false,
+		aYeOleSwitcheroo: false
+	]
 
     GameState state = GameState.TITLE//0=title, 1=instructions, 2=Game play, 3=gameover, 4=Acheivments
     int bSpeed = 0, btnSpeed = 0, dropSpeed = 0, blink = 0, flipNext = 0
@@ -34,15 +45,15 @@ class FoodChain extends leikr.Engine {
     boolean fSuper = false, vSuper = false, mSuper = false, dSuper = false
 
     Supers supers = new Supers()
-    SaveUtil saveUtil = new SaveUtil()
-    int	high_score = saveUtil.loadScore()
+    SaveUtil saveUtil
+    int	high_score
 
     int bombs = 1, swaps = 1, bombDur = 0, bombX, bombY, swapX, swapY, goX, goY
 
     def goWave = [6,4,2,0,0,2,4,6]
 
     int shake = 0, bgX = 0, bgY = 0
-    boolean aDairyQueen = false, aMeatPump = false, aGrassGreener = false, aAllOrangeJuice = false, aFive = false, aTen = false, aFifteen = false, aTwenty = false, aBombBastic = false, aYeOleSwitcheroo = false
+    
 
     int airEaten = 0
     int newAcheivmentIcon = 0, achSpeed = 100
@@ -56,16 +67,7 @@ class FoodChain extends leikr.Engine {
     def init(){
         airEaten = 0
         high_score = saveUtil.loadScore()
-        aDairyQueen = false
-        aMeatPump = false
-        aGrassGreener = false
-        aAllOrangeJuice = false
-        aFive = false
-        aTen = false
-        aFifteen = false
-        aTwenty = false
-        aBombBastic = false
-        aYeOleSwitcheroo = false
+        acheivments = saveUtil.loadAcheivments()
 
         shake = 0
         bgX = 0
@@ -111,29 +113,11 @@ class FoodChain extends leikr.Engine {
         //END play variables
     }
 
-    @Override
-    public void onPovChanged(GamePad gamePad, int povCode, PovState povState) {
-        println("::: Debug POV :::")
-        println("Controller $gamePad , Code: $povCode , State $povState")
-    }
-
-
-    @Override
-    public void onButtonDown(GamePad cont, int buttonId){
-        println("::: Debug Button :::")
-    	println("Controller: $cont , Value: $buttonId")
-    }
-    @Override
-    public void onAxisChanged(GamePad controller, int axisCode, float buttonId) {
-    	println("::: Debug Axis :::")
-    	println("Controller: $controller , Axis: $axisCode , Value: $buttonId")
-    }
-
-
-
-
     void create(){
         loadImages()
+        saveUtil = new SaveUtil(lData)
+    	high_score  = saveUtil.loadScore()
+    	acheivments = saveUtil.loadAcheivments()
     }
 
     //START UPDATE
@@ -160,7 +144,7 @@ class FoodChain extends leikr.Engine {
             blink++
             if(keyPress("Space") || bp("SELECT") ){
                 playSound("start.wav")
-                stopAllMusic()
+                stopMusic()
                 state = GameState.GAME_PLAY
             }
 
@@ -298,6 +282,7 @@ class FoodChain extends leikr.Engine {
             if(lives == 0){
                 state = GameState.GAME_OVER
                 saveUtil.saveScore(high_score)
+                saveUtil.saveAcheivments(acheivments)
             }
             //CHECK ACHEIVMENTS
             checkAcheivments()
@@ -360,12 +345,12 @@ class FoodChain extends leikr.Engine {
                 row.times{j->
                     if(i ==cx && j==cy){
                         if(cf > 10){
-                            jar[i][j].draw(lScreen,(96+ i*16),(16+j*16), true)
+                            jar[i][j].draw(lGraphics,(96+ i*16),(16+j*16), true)
                         }else{
-                            jar[i][j].draw(lScreen,(96+ i*16),(16+j*16), false)
+                            jar[i][j].draw(lGraphics,(96+ i*16),(16+j*16), false)
                         }
                     }else{
-                        jar[i][j].draw(lScreen,(96+ i*16),(16+j*16))
+                        jar[i][j].draw(lGraphics,(96+ i*16),(16+j*16))
                     }
                 }
             }
@@ -906,81 +891,77 @@ class FoodChain extends leikr.Engine {
     }
 
     def checkAcheivments(){
-    	if(level >= 5 && !aFive) {
+    	if(level >= 5 && !acheivments["aFive"]) {
             playSound("award.wav")
-            aFive = true
+            acheivments["aFive"] = true
             newAcheivmentIcon = achSpeed
     	}
-    	if(level >= 10 && !aTen) {
+    	if(level >= 10 && !acheivments["aTen"]) {
             playSound("award.wav")
-            aTen = true
+            acheivments["aTen"] = true
             newAcheivmentIcon = achSpeed
     	}
-    	if(level >= 15 && !aFifteen){
+    	if(level >= 15 && !acheivments["aFifteen"]){
             playSound("award.wav")
-            aFifteen = true
+            acheivments["aFifteen"] = true
             newAcheivmentIcon = achSpeed
     	}
-    	if(level >= 20 && !aTwenty){
+    	if(level >= 20 && !acheivments["aTwenty"]){
             playSound("award.wav")
-            aTwenty = true
-            newAcheivmentIcon = achSpeed
-    	}
-
-    	if(bombs == 10 && !aBombBastic){
-            playSound("award.wav")
-            aBombBastic = true
-            newAcheivmentIcon = achSpeed
-    	}
-    	if(swaps == 10 && !aYeOleSwitcheroo){
-            playSound("award.wav")
-            aYeOleSwitcheroo = true
+            acheivments["aTwenty"] = true
             newAcheivmentIcon = achSpeed
     	}
 
-    	if(meats >= 40 && !aMeatPump) {
+    	if(bombs == 10 && !acheivments["aBombBastic"]){
             playSound("award.wav")
-            aMeatPump = true
+            acheivments["aBombBastic"] = true
             newAcheivmentIcon = achSpeed
     	}
-    	if(veggies >= 40 && !aGrassGreener) {
+    	if(swaps == 10 && !acheivments["aYeOleSwitcheroo"]){
             playSound("award.wav")
-            aGrassGreener = true
+            acheivments["aYeOleSwitcheroo"] = true
             newAcheivmentIcon = achSpeed
     	}
-    	if(fruits >= 40 && !aAllOrangeJuice) {
+
+    	if(meats >= 40 && !acheivments["aMeatPump"]) {
             playSound("award.wav")
-            aAllOrangeJuice = true
+            acheivments["aMeatPump"] = true
             newAcheivmentIcon = achSpeed
     	}
-    	if(drinks >= 40 && !aDairyQueen) {
+    	if(veggies >= 40 && !acheivments["aGrassGreener"]) {
+            playSound("award.wav")
+            acheivments["aGrassGreener"] = true
+            newAcheivmentIcon = achSpeed
+    	}
+    	if(fruits >= 40 && !acheivments["aAllOrangeJuice"]) {
+            playSound("award.wav")
+            acheivments["aAllOrangeJuice"] = true
+            newAcheivmentIcon = achSpeed
+    	}
+    	if(drinks >= 40 && !acheivments["aDairyQueen"]) {
             playSound("award.wav")
             newAcheivmentIcon = achSpeed
-            aDairyQueen = true
+            acheivments["aDairyQueen"] = true
     	}
     }
 
     def drawAcheivments(){
-        if(aFive) {sprite(19, 16, 40, 1)}else{sprite(23, 16, 40, 1)}
-        if(aTen) {sprite(20, 64, 40, 1)}else{sprite(23, 64, 40, 1)}
-        if(aFifteen) {sprite(21, 112, 40, 1)}else{sprite(23, 112, 40, 1)}
-        if(aTwenty) {sprite(22, 160, 40, 1)}else{sprite(23, 160, 40, 1)}
+        if(acheivments["aFive"]) {sprite(19, 16, 40, 1)}else{sprite(23, 16, 40, 1)}
+        if(acheivments["aTen"]) {sprite(20, 64, 40, 1)}else{sprite(23, 64, 40, 1)}
+        if(acheivments["aFifteen"]) {sprite(21, 112, 40, 1)}else{sprite(23, 112, 40, 1)}
+        if(acheivments["aTwenty"]) {sprite(22, 160, 40, 1)}else{sprite(23, 160, 40, 1)}
 
-        if(aBombBastic) {sprite(10, 16, 104,1)}else{sprite(23, 16, 104, 1)}
-        if(aYeOleSwitcheroo){ sprite(11, 64, 104,1)}else{sprite(23, 64, 104, 1)}
-        if(aMeatPump) {sprite(13, 112, 104,1)}else{sprite(23, 112, 104, 1)}
-        if(aAllOrangeJuice) {sprite(15, 160, 104,1)}else{sprite(23, 160, 104, 1)}
+        if(acheivments["aBombBastic"]) {sprite(10, 16, 104,1)}else{sprite(23, 16, 104, 1)}
+        if(acheivments["aYeOleSwitcheroo"]){ sprite(11, 64, 104,1)}else{sprite(23, 64, 104, 1)}
+        if(acheivments["aMeatPump"]) {sprite(13, 112, 104,1)}else{sprite(23, 112, 104, 1)}
+        if(acheivments["aAllOrangeJuice"]) {sprite(15, 160, 104,1)}else{sprite(23, 160, 104, 1)}
 
-        if(aDairyQueen) {sprite(12, 208, 40,1)}else{sprite(23, 208, 40, 1)}
-        if(aGrassGreener){ sprite(14, 208, 104,1)}else{sprite(23, 208, 104, 1)}
+        if(acheivments["aDairyQueen"]) {sprite(12, 208, 40,1)}else{sprite(23, 208, 40, 1)}
+        if(acheivments["aGrassGreener"]){ sprite(14, 208, 104,1)}else{sprite(23, 208, 104, 1)}
     }
 
     boolean bp(b){
-        if(button(b) && bSpeed > btnSpeed ){
-            bSpeed = 0
-            return true
-        }
-        return false
+        buttonPress(b)
     }
 
 }

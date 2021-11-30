@@ -200,8 +200,8 @@ class Blocks extends leikr.Engine {
 		}
 				
 		def fill(clr){
-			activeTetromino.size.times{r->
-				activeTetromino.size.times{c->
+			activeTetromino.size().times{r->
+				activeTetromino.size().times{c->
 					if(activeTetromino[r][c]){
 						drawSquare(x+c, y+r, clr)
 					}
@@ -209,8 +209,8 @@ class Blocks extends leikr.Engine {
 			}
 		}
 		def drawNext(x,y){
-			activeTetromino.size.times{r->
-				activeTetromino.size.times{c->
+			activeTetromino.size().times{r->
+				activeTetromino.size().times{c->
 					if(activeTetromino[r][c]){
 						drawSquare(x+c, y+r, color)
 					}
@@ -247,8 +247,8 @@ class Blocks extends leikr.Engine {
 			while(!collision(0,1,this.activeTetromino)){
 				this.y++
 			}
-			activeTetromino.size.times{r->
-				activeTetromino.size.times{c->
+			activeTetromino.size().times{r->
+				activeTetromino.size().times{c->
 					if(activeTetromino[r][c]){
 						drawSquare(x+c, y+r, color)
 					}
@@ -266,7 +266,7 @@ class Blocks extends leikr.Engine {
 			}
 		}
 		def rotate(){
-			def nextPattern = this.tetromino[(this.tetrominoN + 1)%this.tetromino.size]
+			def nextPattern = this.tetromino[(this.tetrominoN + 1)%this.tetromino.size()]
 			def kick = 0
 			if(this.collision(0,0,nextPattern)){
 				if(this.x > COL/2){
@@ -279,12 +279,12 @@ class Blocks extends leikr.Engine {
 			}
 			if(!this.collision(kick,0,nextPattern)){
 				this.x += kick;
-				this.tetrominoN = (this.tetrominoN + 1)%this.tetromino.size; // (0+1)%4 => 1
+				this.tetrominoN = (this.tetrominoN + 1)%this.tetromino.size(); // (0+1)%4 => 1
 				this.activeTetromino = this.tetromino[this.tetrominoN];
 			}
 		}
 		def rotateB(){
-			def nextPattern = this.tetromino[(this.tetrominoN - 1)%this.tetromino.size]
+			def nextPattern = this.tetromino[(this.tetrominoN - 1)%this.tetromino.size()]
 			def kick = 0
 			if(this.collision(0,0,nextPattern)){
 				if(this.x > COL/2){
@@ -297,14 +297,14 @@ class Blocks extends leikr.Engine {
 			}
 			if(!this.collision(kick,0,nextPattern)){
 				this.x += kick;
-				this.tetrominoN = (this.tetrominoN - 1)%this.tetromino.size; // (0+1)%4 => 1
+				this.tetrominoN = (this.tetrominoN - 1)%this.tetromino.size(); // (0+1)%4 => 1
 				this.activeTetromino = this.tetromino[this.tetrominoN];
 			}
 		}
 		
 		def lock(){
-			for(int r = 0; r < this.activeTetromino.size; r++){
-				for(int c = 0; c < this.activeTetromino.size; c++){
+			for(int r = 0; r < this.activeTetromino.size(); r++){
+				for(int c = 0; c < this.activeTetromino.size(); c++){
 				    // we skip the empty squares
 				    if( !this.activeTetromino[r][c]){
 				        continue;
@@ -366,8 +366,8 @@ class Blocks extends leikr.Engine {
 			lines += count
 		}
 		def collision(x,y,piece){
-			for(int r = 0; r < piece.size; r++){
-				for(int c = 0; c < piece.size; c++){
+			for(int r = 0; r < piece.size(); r++){
+				for(int c = 0; c < piece.size(); c++){
 				    // if the square is empty, we skip it
 				    if(!piece[r][c]){
 				        continue;
@@ -395,7 +395,7 @@ class Blocks extends leikr.Engine {
 	}
 }
 
-class Tetrominoe{
+class Tetrominoe {
 	static def I = [
 		[
 			[0, 0, 0, 0],

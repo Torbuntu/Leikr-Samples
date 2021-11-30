@@ -24,12 +24,12 @@ class SpriteDemo extends leikr.Engine {
 		sprite 0, 10, 40, true, true
 				
 		//Adding a bit of rotation in degrees. The rotation must be a float variable
-		sprite 0, 30, 10, rotation
+		sprite 0, 30, 10, 0, rotation
 		
 		//And with rotation?
-		sprite 0, 30, 20, true, false, rotation
-		sprite 0, 30, 30, false, true, rotation
-		sprite 0, 30, 40, true, true, rotation
+		sprite 0, 30, 20, 0, rotation, true, false
+		sprite 0, 30, 30, 0, rotation, false, true
+		sprite 0, 30, 40, 0, rotation, true, true
 		
 		/*
 		These methods can also be used with a size parameter.
@@ -44,17 +44,17 @@ class SpriteDemo extends leikr.Engine {
 		sprite 1, 60, 10, 1
 		
 		//Adding some flipp values for flipX and flipY
-		sprite 1, 60, 30, true, false, 1
-		sprite 1, 60, 50, false, true, 1
-		sprite 1, 60, 70, true, true, 1
+		sprite 1, 60, 30, 1, true, false
+		sprite 1, 60, 50, 1, false, true
+		sprite 1, 60, 70, 1, true, true
 				
 		//Adding a bit of rotation in degrees. The rotation must be a float variable
-		sprite 1, 90, 10, rotation, 1
+		sprite 1, 90, 10, 1, rotation
 		
 		//sprite id, x, y, flipX, flipY, rotation, size
-		sprite 1, 90, 30, true, false, rotation, 1
-		sprite 1, 90, 50, false, true, rotation, 1
-		sprite 1, 90, 70, true, true, rotation, 1
+		sprite 1, 90, 30, 1, rotation, true, false
+		sprite 1, 90, 50, 1, rotation,  false, true
+		sprite 1, 90, 70, 1, rotation,  true, true
 		
 		
 		/*
@@ -71,7 +71,7 @@ class SpriteDemo extends leikr.Engine {
 		
 		sprite([4,5,6,7], 20, 100, 2, 2, 1)
 		
-		sprite([4,5,6,7], 60, 100, 2, 2, true, false, 1)
+		sprite([4,5,6,7], 60, 100, 2, 2, 1, true, false)
 		
 		
 		
@@ -94,15 +94,15 @@ class SpriteDemo extends leikr.Engine {
 		spriteSc 1, 140, 40, 4, 0.1, 1
 		
 		//rotation of course
-		spriteSc 0, 170, 20, 3f, 0.7f, rotation
-		spriteSc 1, 200, 20, 3f, 0.3f, rotation, 1
+		spriteSc 0, 170, 20, 3f, 0.7f, 0, rotation
+		spriteSc 1, 200, 20, 3f, 0.3f, 1, rotation
 		
 		//And with the flips!
 		spriteSc 0, 170, 60, 3f, 0.7f, true, false
-		spriteSc 1, 200, 60, 3f, 0.3f, false, true, 1
+		spriteSc 1, 200, 60, 3f, 0.3f, 1, false, true
 		
-		spriteSc 0, 170, 100, 3f, 0.7f, true, false, rotation
-		spriteSc 1, 200, 100, 3f, 0.3f, false, true, rotation, 1
+		spriteSc 0, 170, 100, 3f, 0.7f, 0, rotation, true, false
+		spriteSc 1, 200, 100, 3f, 0.3f, 1, rotation, false, true
     }
 }
 

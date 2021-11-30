@@ -1,8 +1,8 @@
 class Enemy{
 	def x = 72 
 	def y = 72 
-	def width =8 
-	def height =8 
+	def width = 8 
+	def height = 8 
 	def f =false 
 	def spid = 10 
 	def alive = true 
@@ -15,7 +15,7 @@ class Enemy{
 	def vs
 	def l
 	def r
-	def health
+	def health = 5
 	
 	def Enemy(){
 	

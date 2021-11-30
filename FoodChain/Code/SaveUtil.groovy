@@ -1,43 +1,68 @@
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
 
 class SaveUtil {
 
-	def high_score = 0;	
-	SaveUtil(){
-		
+	def highScore = 0;
+	def acheivments = [:]
+	def dataManager
+	SaveUtil(dataManager){
+		this.dataManager = dataManager
 	}
 	
 	def loadScore(){
-		Properties prop = new Properties();
-		try(InputStream stream = new FileInputStream(new File("Programs/FoodChain/save.properties"))) {
-		    prop.load(stream);
-		    high_score = (prop.getProperty("high_score") != null) ? Integer.parseInt(prop.getProperty("high_score")) : 0;
-
-		} catch (IOException | NumberFormatException ex) {
-		    System.out.println(ex.getMessage());
+		try{
+			highScore = dataManager.readData("score").get("high_score")
+		}catch(Exception ex){
+			highScore = 0
 		}
-		return high_score
+		return highScore
+	}
+	
+	def loadAcheivments(){
+		try{
+			acheivments = dataManager.readData("score").get("acheivments")
+			println "loaded: ${acheivments}"
+			if(acheivments.size() < 10){
+				acheivments = [
+					aDairyQueen: false,
+					aMeatPump: false, 
+					aGrassGreener: false,
+					aAllOrangeJuice: false,
+					aFive: false,
+					aTen: false,
+					aFifteen: false,
+					aTwenty: false,
+					aBombBastic: false,
+					aYeOleSwitcheroo: false
+				]
+			}
+		}catch(Exception ex){
+			acheivments = [
+				aDairyQueen: false,
+				aMeatPump: false, 
+				aGrassGreener: false,
+				aAllOrangeJuice: false,
+				aFive: false,
+				aTen: false,
+				aFifteen: false,
+				aTwenty: false,
+				aBombBastic: false,
+				aYeOleSwitcheroo: false
+			]
+		}
+		return acheivments
 	}
 	
 	
 	void saveScore(score){
-		if(score > high_score){
-			high_score = score
-			Properties prop = new Properties();
-			try(FileOutputStream stream = new FileOutputStream(new File("Programs/FoodChain/save.properties"))){
-				prop.setProperty("high_score",high_score.toString())
-
-				prop.store(stream, null)
-				println "::: High score saved: $high_score :::"
-			} catch (IOException | NumberFormatException ex) {
-				System.out.println(ex.getMessage());
-				println "::: High score save failure :::"
-			}	
+		if(score > highScore){
+			highScore = score
+			dataManager.saveData("score", ["high_score": highScore, "acheivments": acheivments])
+			
 		}	
+	}
+	
+	void saveAcheivments(a){
+		acheivments = a
+		dataManager.saveData("score", ["high_score": highScore, "acheivments": acheivments])
 	}
 }

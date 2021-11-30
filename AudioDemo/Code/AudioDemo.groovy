@@ -5,7 +5,12 @@ class AudioDemo extends leikr.Engine {
     def soundIndex = 0, offset = 0
     def pan = 0f
     
-    def files = new File("Programs/AudioDemo/Audio/Sound").listFiles()
+    def files
+    
+    void create(){
+    	files = listSounds()
+    	println files
+    }
     
     // override the onResume to handle if we should continue music or not.
     void onResume(){
@@ -52,7 +57,7 @@ class AudioDemo extends leikr.Engine {
         if(soundIndex > 79) soundIndex = 0
         
         if(keyPress("S")){
-        	String n = files[soundIndex].getName()
+        	String n = files[soundIndex]
         	playSound n, 1f, 1f, pan
         }
         
@@ -90,9 +95,9 @@ class AudioDemo extends leikr.Engine {
 		drawRect(7, 128, 56, 106, 86)
 		10.times{it->
 			if (soundIndex == it+offset) {
-				drawString(31, it + offset + ". "+files[it+offset].getName(), 132, 8*it+60)
+				drawString(31, it + offset + ". "+files[it+offset], 132, 8*it+60)
 			} else {
-				drawString 7, it + offset + ". "+files[it+offset].getName(), 136, 8*it+60
+				drawString 7, it + offset + ". "+files[it+offset], 136, 8*it+60
 			}
 		}
 		

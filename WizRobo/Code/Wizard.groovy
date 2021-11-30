@@ -1,6 +1,3 @@
-import leikr.managers.LeikrScreenManager;
-import leikr.controls.LeikrController;
-import leikr.controls.LeikrKeyboard
 import Bolt
 class Wizard{
     float x = 10 
@@ -59,31 +56,28 @@ class Wizard{
     	this.health = health
     }
     
-    boolean solid(LeikrScreenManager lsm, x, y){
+    boolean solid(lsm, x, y){
         int cellid = getTile(lsm, x, y)
-        if(	cellid > 60 && cellid < 170){
-            return true
-        }
-        return false
+        return (cellid > 60 && cellid < 170)
     }	
     
-    int getTile(LeikrScreenManager lsm, x, y){
+    int getTile(lsm, x, y){
         def mx = ((x)/8 )
         def my = ((y)/8 )
-        return lsm.getMapTileId(mx,my)
+        return lsm.getMapTile(mx,my)
     }
     
-    void updateWizard(LeikrScreenManager lsm, LeikrKeyboard lk, LeikrController contrl, Bolt bolt){
+    void updateWizard(lsm, lk, audio, bolt){
     	waTime++
         vx = 0
         spid = 0
         //check left or right moving
-        if((lk.key(left) || (contrl != null && contrl.button("LEFT"))) && !solid(lsm, x-1, y) && !solid(lsm, x-1, y+7)){		
+        if(lk.key(left) && !solid(lsm, x-1, y) && !solid(lsm, x-1, y+7)){		
             vx =-1           
             f = true
             walking = true
         }
-        if((lk.key(right) || (contrl != null && contrl.button("RIGHT"))) && !solid(lsm, x+8,y) && !solid(lsm, x+8,y+7)){
+        if(lk.key(right) && !solid(lsm, x+8,y) && !solid(lsm, x+8,y+7)){
             vx = 1         
             f = false
             walking = true
@@ -104,7 +98,7 @@ class Wizard{
         }
 	
         //check jumping.
-        if(((lk.key(up) || (contrl != null && contrl.button("B"))) || lk.key("Up")) && vy==0){        	
+        if((lk.key(up) || lk.key("Up")) && vy==0){        	
             vy=-3.5            
             g = false 
         }	
@@ -139,28 +133,22 @@ class Wizard{
     	}
     	
         //action buttons
-    	if(lk.key("X") || (contrl != null && contrl.button("A"))){
+    	if(lk.key("X") ){
             chargep(bolt)
     	}
-    	if(lk.key("Z") || (contrl != null && contrl.button("Y"))){
-            attackp(bolt)
+    	if(lk.key("Z") ){
+            attackp(bolt, audio)
     	}
     	
     	if(ladder(lsm)){
             vy = 0
-            if(lk.key(down) || (contrl != null && contrl.button("DOWN") )|| lk.key("Down") ){
+            if(lk.key(down) || lk.key("Down") ){
                 vy = 0.6
             }
-            if(lk.key(up) || (contrl != null && contrl.button("UP") )|| lk.key("Up")){
+            if(lk.key(up) || lk.key("Up")){
                 vy = -0.6
             }            
         }	
-        
-        if(bolt.charge == 30){
-            vx = (vx + (vx / 2))
-            if(lk.key(right) && solid(lsm, x+8+vx, y)) vx = 0
-            if(lk.key(left) && solid(lsm, x+vx, y)) vx = 0
-        }
         
         x=x+vx
         y=y+vy
@@ -175,7 +163,7 @@ class Wizard{
     }
     
         
-    boolean ladder(LeikrScreenManager lsm){
+    boolean ladder(lsm){
     	if(getTile(lsm, x, y+8+vy) == 33 || getTile(lsm, x+8, y+8+vy) == 33 ){
             return true
     	}else{
@@ -184,7 +172,7 @@ class Wizard{
     }
     
         
-    void chargep(Bolt bolt){
+    void chargep(bolt){
     	if(bolt.attack){
             return
     	}	
@@ -195,13 +183,13 @@ class Wizard{
     	}
     }
     
-    void attackp(Bolt bolt){
+    void attackp(bolt, audio){
     	if(bolt.attack){
             return
     	}
     	charged = false
     	bolt.attack = true
-    	
+    	audio.playSound("fire.wav")
     	bolt.f = f
     	if(f){
             bolt.vx = -3   		

@@ -23,8 +23,5 @@ class Player{
 	
 	def draw(screen){
 		screen.sprite(0,x,y,2)
-//		screen.drawColor(1)
-//		screen.rect(x, y, 16, 16, true)	
-//		screen.rect((int)(x+16), (int)(y+6), 6, 4, true)	
 	}
 }

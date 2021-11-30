@@ -237,7 +237,7 @@ class FlappyBirb extends leikr.Engine {
 				score = 0
 				birb.y = birbStartY
 				blocks.clear()
-				stopAllMusic()
+				stopMusic()
 			}
             // give player a default boost
             if (newState == GameMode.PLAY) {
@@ -525,7 +525,7 @@ class FlappyBirb extends leikr.Engine {
 
 		// draw player if we're actually playing
 		if (state == GameMode.PLAY || state == GameMode.READY || state == GameMode.DIE) {
-			sprite(birb.sprId, birb.x, birb.y, 0, 1)
+			sprite(birb.sprId, birb.x, birb.y, 1, 0)
 		}
 	}
 
@@ -536,18 +536,18 @@ class FlappyBirb extends leikr.Engine {
 		
 		// top pipe
 		for(int y=(blocksTop * 16)-gapStartY-16; y<gapStartY-16; y+=16) {
-			sprite(10, x, y, false, true, 1)
-			sprite(11, x+16, y, false, true, 1)
+			sprite(10, x, y, 1, false, true)
+			sprite(11, x+16, y, 1, false, true)
 		}
-		sprite(4, x, gapStartY-16, false, false, 1)
-		sprite(5, x+16, gapStartY-16, false, false, 1)
+		sprite(4, x, gapStartY-16, 1, false, false)
+		sprite(5, x+16, gapStartY-16, 1, false, false)
 
 		// bottom pipe
-		sprite(2, x, gapEndY, false, false, 1)
-		sprite(3, x+16, gapEndY, false, false, 1)
+		sprite(2, x, gapEndY, 1, false, false)
+		sprite(3, x+16, gapEndY, 1, false, false)
 		for(int y=gapEndY+16; y<blocksBottom*16+gapEndY; y+=16) {
-			sprite(10, x, y, false, false, 1)
-			sprite(11, x+16, y, false, false, 1)
+			sprite(10, x, y, 1, false, false)
+			sprite(11, x+16, y, 1, false, false)
 		}
 	}
 }
@@ -584,6 +584,7 @@ class FancyString {
 		}
 	}
 }
+
 class Letter {
 	int index = 0
 	def x = 0

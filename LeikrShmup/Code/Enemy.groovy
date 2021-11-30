@@ -17,7 +17,5 @@ class Enemy{
 	
 	def draw(screen){
 		screen.sprite(16,x,y,1)
-//		screen.drawColor(23)
-//		screen.circle(x, (int)y, 8, true)	
 	}
 }
